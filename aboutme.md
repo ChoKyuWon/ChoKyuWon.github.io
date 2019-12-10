@@ -13,6 +13,7 @@ My research interests include but not limited to:
 - Fuzzing the kernel.
 - Black box fuzzing.
 - Exploit some vulnerabilities.
+- Blockchain Security.
 
 ### Publications
 Not at all yet.
