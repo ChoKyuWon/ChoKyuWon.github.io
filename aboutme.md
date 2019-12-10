@@ -1,16 +1,14 @@
 ---
 layout: page
 title: About me
-subtitle: Why you'd want to go on a date with me
+subtitle: About all myself
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+I'm security resercher in Korea. I'm interested in follow techniques.
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+- Reverse Engineering X64-86 binary.
+- Fuzzing the kernel.
+- Exploit some vulnerabilities.
 
-What else do you need?
-
-### my history
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](http://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+You can see my projects on projects tab.
+You can also see my (resume)[https://chokyuwon.github.io/resume/]
