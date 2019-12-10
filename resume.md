@@ -23,7 +23,7 @@ Cookie reuse, SQL Injection, E-mail forward, Changing Password.
 <hr/>
 ## Skills, Activities & Interests  
 <hr/>
-__Language:__ Python, C, C++, Assembly(MIPS, Intel x86-64), Rust, Go, Solidity 
+__Language:__ Python, C, C++, Assembly(MIPS, Intel x86-64), Rust, Go, Solidity  
 __Technologies/Environments:__ Visual Studio Code, Django, Windows, Linux, OSX, Ethereum  
-__Activities:__ Led the Campus Information Security Club, Received Google Deep Learning Education 
+__Activities:__ Led the Campus Information Security Club, Received Google Deep Learning Education  
 __Interests:__ Magic:The Gathering, Board Game, Reading books 
