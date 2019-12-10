@@ -20,6 +20,7 @@ hwc=
 =tsiF
 -----END PGP PUBLIC KEY BLOCK-----
 ```
+or [here](public-key.gpg).
 
 WoW!
   
