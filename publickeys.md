@@ -20,7 +20,7 @@ hwc=
 =tsiF
 -----END PGP PUBLIC KEY BLOCK-----
 ```
-or [here](public-key.gpg).
+or [here](https://raw.githubusercontent.com/ChoKyuWon/ChoKyuWon.github.io/master/public-key.gpg).
 
 WoW!
   
