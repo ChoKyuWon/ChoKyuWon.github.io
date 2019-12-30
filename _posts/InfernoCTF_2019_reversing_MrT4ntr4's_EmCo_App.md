@@ -1,3 +1,13 @@
+---
+layout: post
+title: MrT4ntr4's Emco App
+subtitle: Inferno CTF 2019 Writeup
+gh-repo: daattali/beautiful-jekyll
+gh-badge: [star, fork, follow]
+tags: [writeup]
+comments: true
+---
+
 When I excute the file and attack debugger to it, I can find it was written by python.  
 So I use ```python-exe-unpacker```. There are so many package, but main logic is in ```emco``` file.  
 ```emco``` has no signatue and extended, but I can simply read it by add signature on file header and add extend ```.pyc``` and decompile it. 
