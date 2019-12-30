@@ -2,7 +2,7 @@
 layout: post
 title: MrT4ntr4's Emco App
 subtitle: Inferno CTF 2019 Writeup
-gh-repo: daattali/beautiful-jekyll
+gh-repo: ChoKyuWon/writeups
 gh-badge: [star, fork, follow]
 tags: [writeup]
 comments: true

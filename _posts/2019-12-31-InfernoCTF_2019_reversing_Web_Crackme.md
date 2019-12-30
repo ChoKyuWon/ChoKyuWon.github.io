@@ -1,3 +1,13 @@
+---
+layout: post
+title: Web Crackme
+subtitle: Inferno CTF 2019 Writeup
+gh-repo: ChoKyuWon/writeups
+gh-badge: [star, fork, follow]
+tags: [writeup]
+comments: true
+---
+
 In chrome developer tool, I can see it use WASM(WebAssembly.)  
 The page's script is like this:
 ```js
