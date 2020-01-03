@@ -42,7 +42,7 @@ __int64 __fastcall main(__int64 a1, char **a2, char **a3)
   return 0LL;
 }
 ```
-So easily find first key is hardcoded value, ```98416```. But Second key is seem more complex. It input some value on v4, and add it to ```unknown_function```'s first 11byte. Second key must 1byte, 0x00 to 0xFF, but don't know exact value. Via some test, I know the second key is '1', 50. If I can set breakpoint on strcmp, I can see what is s1 directly, but I can't.(It may because of ASLR, but don't know exact reason). So I reverse it only static analyse.  
+So easily find first key is hardcoded value, ```98416```. But Second key is seem more complex. It input some value on v4, and add it to ```unknown_function```'s first 11byte. Second key must 1byte, 0x00 to 0xFF, but don't know exact value. Via some test, I know the second key is '2', 50. If I can set breakpoint on strcmp, I can see what is s1 directly, but I can't.(It may because of ASLR, but don't know exact reason). So I reverse it only static analyse.  
 ```
 objdump -s -j .data ./pro
 ```
