@@ -210,4 +210,4 @@ return 0;
 ```
 And rest part of _main. C++ is hard to understand, but via dynamic analyse, this code overwrite ```rawarray[n][10]``` and save the ```rawarray``` on ```output.png```. ```output.png``` is provided so we just brute force some probability on ```rawarray[n][10]```. So I made python script to brute-force, and get flag finally!
 Flag: ```WhiteHat{SHA1(8333769562446613979)}```
-And you can see my python script on [here.](https://github.com/ChoKyuWon)
+And you can see my python script on [here.](https://github.com/ChoKyuWon/writeups/blob/master/WhitehatGrandprix06/Reversing1/test.py)
