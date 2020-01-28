@@ -21,6 +21,9 @@ description: There's no flood, but I'm awesome! Yeah!
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
+  Blog:
+    - Writeups: "writeuplist"
+    - Paper Summerize: "summerize"
   Projects: "projects"
   Pubilc Key: "publickeys"
   #Resources:
