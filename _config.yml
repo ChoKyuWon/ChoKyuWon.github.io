@@ -23,7 +23,7 @@ navbar-links:
   About Me: "aboutme"
   Blog:
     - Writeups: "writeuplist"
-    - Paper Summerize: "summerize"
+    - Paper Summarize: "summarize"
   Projects: "projects"
   Pubilc Key: "publickeys"
   #Resources:
