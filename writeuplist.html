@@ -13,10 +13,10 @@ title: 'Writeups'
 
 <h2 id="writeup" class="linked-section">
     <i class="fa fa-tag" aria-hidden="true"></i>
-    &nbsp;writeup&nbsp;({{site.tags[tag].size}})
+    &nbsp;writeup&nbsp;({{site.tags["writeup"].size}})
 </h2>
 <div class="post-list">
-    {%- for post in site.tags[tag] -%}
+    {%- for post in site.tags["writeup"] -%}
         <div class="tag-entry">
             <a href="{{ post.url | relative_url }}">{{- post.title -}}</a>
             <div class="entry-date">
