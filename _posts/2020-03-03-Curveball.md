@@ -54,11 +54,17 @@ DLL에서 어느 부분이 변경되었을까요?
 ``CCertObject``의 생성자와 소멸자가 바뀐 것을 확인할 수 있습니다. 하지만 ``ChainGetSubjectStatus()``와 ``CCertObjectCache::FindKnownStoreFlags()``가 가장 크게 바뀌었습니다.  
 이제 새로 추가된 함수를 확인해 봅시다.  
 ![added functions](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-3.png)  
-Several of the new functions stand out and one in particular serves as a good starting point for analysis. The ChainLogMSRC54294Error() function is a new logging function added to facilitate Windows event logging for potential exploitation attempts. Its purpose can be identified through the presence of the following block:
 몇가지 새로운 함수가 눈에 띕니다. 그 중 조사를 시작하기에 가장 좋아 보이는 함수는 ``ChainLogMSRC54294Error()``이군요. 이 함수는 새로운 로깅 함수인데, exploit 가능성이 높은 시도를 로깅하기 위한 함수입니다. 이 함수의 용도는 다음 블록을 통해 식별할 수 있습니다.  
 ![following block](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-4.png)  
-The block passes a string containing the CVE reference associated with this vulnerability to an external library function called CveEventWrite, which is a relatively new Event Tracing API function that writes a CVE-based event to the Windows Event Log.
 이 블록은 CVE 정보를 포함하는 문자열을 라이브러리 외부의 ``CveEventWrite`` 함수에 전달합니다. 이는 Windows 이벤트 로그에 CVE 기반의 이벤트로 기록되게 됩니다.  
 이 정보를 사용해서, 우리는 이 함수의 역참조를 조사하여 어느 상황에 이벤트가 기록되는지 확인할 수 있습니다. 이 경우에, ``ChainLogMSRC54294Error()``을 호출하는 함수는 ``ChainGetSubjectStatus()``가 유일합니다. 이 함수는 이번 패치에서 가장 큰 변화가 있었던 함수입니다.  
 ![ChainGetSubjectStatus](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-5.png)  
 새로운 로깅 함수를 호출하는 주변 맥락을 보았을 때, ``CryptVerifyCertificateSignatureEx()``와 ``ChainComparePublicKeyParametersAndBytes()``의 결과에 의해 로깅 함수가 호출되는 것을 알 수 있습니다. 두 함수중 후자는 패치를 통해 추가된 함수입니다. 따라서 ``ChainGetSubjectStatus()``는 패치에 의한 변경점을 조사하기에도, 어느 때에 호출되는지 조사하기에도 적합한 대상으로 볼 수 있습니다.
+
+## CryptoAPI의 인증서 검증 내부 동작
+``ChainGetSubjectStatus()``의 동작을 이해하기 위해, 인증서를 다루기 위해 CryptoAPI를 사용하는 특정한 프로그램을 먼저 확인하겠습니다.  
+우리의 경우, 파워쉘의 Invoke-Webrequest cmdlet에서 분석을 진행하였지만, 다른 TLS 클라이언트 또한 비슷한 방식으로 동작합니다. 파워쉘이 처음으로 로드되면, 명시적으로 신뢰하는 인증서들을 포함한 시스템 인증서 저장소의 핸들을 ``CertOpenStore()``를 호출하여 획득합니다. 따라서 파워쉘은 필요할 때 시스템 인증서 저장소를 사용할 수 있습니다. 그 뒤에 이 인증서 저장소들은 *collection*에 추가되어 하나의 통합된 인증서 저장소인것처럼 효과적으로 동작합니다.  
+Invoke-Webrequest같은 커맨드를 통해 HTTP over TLS 요청을 서버에게 보내고 나면, 서버는 종딘 인증서와 그 인증서를 검증하는 데 사용되는 인증서 체인이 포함된 TLS 인증 핸드쉐이크 메세지를 전달합니다. 이 인증서들을 받고 나면, 추가적인 *in-memory* 저장소가 ``CertOpenStore()``를 추가로 호출하여 생성됩니다. 전달받은 인증서들은 새로운 인증서 저장소에 ``CertAddEncodedCertificateToStore()`` 함수를 통해 추가됩니다. 이 함수는 인증서 저장소의 핸들과 원본 인증서의 포인터, 그리고 ASN.1 구조에 해당하는 CERT_INFO 구조체의 포인터를 포함한 ``CERT_CONTEXT`` 구조체를 생성합니다.  
+For example, these are the structures created as a result of calling CertAddEncodedCertificateToStore() for the end certificate.
+예를 들어, 이 구조체들은 종단 인증서에 ``CertAddEncodedCertificateToStore()``를 호충한 결과로 생성되었습니다.  
+![CertAddEncodedCertificateToStore](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-6.png)  
