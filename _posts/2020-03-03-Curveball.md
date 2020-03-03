@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [번역] An In-Depth Technical Analysis of CurveBall
+title: \[번역] An In-Depth Technical Analysis of CurveBall
 subtitle: CVE-2020-0601
 tags: [번역]
 comments: true
