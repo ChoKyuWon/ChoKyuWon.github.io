@@ -36,4 +36,6 @@ Microsoft의 2020년 화요일의 첫번째 [패치](https://blog.trendmicro.com
   
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;y^2=x^3+ax+b" title="Elliptic Curve" />  
   
-타원 곡선 암호에서, 이 방정식의 해는 유한 체 위에서 계산됩니다. 유한 체는 [갈루아 체](https://web.stanford.edu/class/ee392d/Chap7.pdf)라고도 하는데, 유한한 수로 구성된 집합으로 소수 p 또는 p의 거듭 제곱을 포함하며 <img src="https://latex.codecogs.com/svg.latex?\Large&space;GF(p^n)" title="Galois field" />으로 나타냅니다.
+타원 곡선 암호에서, 이 방정식의 해는 유한 체 위에서 계산됩니다. 유한 체는 [갈루아 체](https://web.stanford.edu/class/ee392d/Chap7.pdf)라고도 하는데, 유한 체는 유한한 수로 구성된 집합으로 소수 p 또는 p의 거듭 제곱을 포함하며 <img src="https://latex.codecogs.com/svg.latex?\Large&space;GF(p^n)" title="Galois field" />으로 나타냅니다. 주어진 타원 곡선의 *점*은 소수 체에 대한 {0,1,2,…, p-1} 범위의 x 및 y 좌표로 구성됩니다 (i.e n이 1 인 경우). 집합의 원소 수는 체의 순서로 알려져 있음으로 타원 곡선의 순서는 곡선의 모든 점으로 구성됩니다.  
+ECC에서 사용되는 타원 곡선은 기준점 혹은 생성점으로 부르는 점을 정의합니다. 이 점은 곡선 위의 다른 점을 *생성*하는데 사용 할 수 있는 곡선 위의 특별한 점입니다. 이것은 기준점과 유한 체 위의 정수 N을 곱함으로써 얻을 수 있습니다. *named curve*의 경우 a, b, 체 식별자 (일반적으로 소수 p) 및 기준점이 모두 사전에 결정되고 각 곡선의 공식 표준에 문서화되어 있습니다. 반대로, 인증서가 ecParameters를 정의했을 경우 다음과 같은 구조체를 통해 곡선의 모든 매개변수를 정의할 수 있습니다.  
+![ecParameters](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-code-6.png)  
