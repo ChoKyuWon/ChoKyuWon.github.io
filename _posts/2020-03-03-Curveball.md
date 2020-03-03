@@ -1,6 +1,6 @@
 ---
 layout: post
-title: \[번역] An In-Depth Technical Analysis of CurveBall
+title: "[번역]" An In-Depth Technical Analysis of CurveBall
 subtitle: CVE-2020-0601
 tags: [번역]
 comments: true
@@ -32,3 +32,8 @@ Microsoft의 2020년 화요일의 첫번째 [패치](https://blog.trendmicro.com
 ![EcpkParameters](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-code-5.png)  
 다른 말로 말하자면, 타원곡선의 파라미터는 OID에서 제공하는 알려진 “[named curves](https://docs.microsoft.com/en-us/windows/win32/seccng/cng-named-elliptic-curves)”를 사용하여 묵시적으로 정의할 수도 있고, 혹은 ecParameters를 사용하여 명시적으로 정의할 수 있습니다. 취약점은 공격자가 named curve 대신 ecParameters를 사용하여 제작한 인증서를 사용할 때 존재합니다. 취약점에 대해 상세히 설명하기 전에, 빠르게 타원곡선에 대해 설명하겠습니다.
 ## 타원 곡선
+타원 곡선은 다음과 같은 형태의 수식을 말합니다.  
+  
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;y^2=x^3+ax+b" title="Elliptic Curve" />  
+  
+타원 곡선 암호에서,
