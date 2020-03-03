@@ -39,3 +39,26 @@ Microsoft의 2020년 화요일의 첫번째 [패치](https://blog.trendmicro.com
 타원 곡선 암호에서, 이 방정식의 해는 유한 체 위에서 계산됩니다. 유한 체는 [갈루아 체](https://web.stanford.edu/class/ee392d/Chap7.pdf)라고도 하는데, 유한 체는 유한한 수로 구성된 집합으로 소수 p 또는 p의 거듭 제곱을 포함하며 <img src="https://latex.codecogs.com/svg.latex?\Large&space;GF(p^n)" title="Galois field" />으로 나타냅니다. 주어진 타원 곡선의 *점*은 소수 체에 대한 {0,1,2,…, p-1} 범위의 x 및 y 좌표로 구성됩니다 (i.e n이 1 인 경우). 집합의 원소 수는 체의 순서로 알려져 있음으로 타원 곡선의 순서는 곡선의 모든 점으로 구성됩니다.  
 ECC에서 사용되는 타원 곡선은 기준점 혹은 생성점으로 부르는 점을 정의합니다. 이 점은 곡선 위의 다른 점을 *생성*하는데 사용 할 수 있는 곡선 위의 특별한 점입니다. 이것은 기준점과 유한 체 위의 정수 N을 곱함으로써 얻을 수 있습니다. *named curve*의 경우 a, b, 체 식별자 (일반적으로 소수 p) 및 기준점이 모두 사전에 결정되고 각 곡선의 공식 표준에 문서화되어 있습니다. 반대로, 인증서가 ecParameters를 정의했을 경우 다음과 같은 구조체를 통해 곡선의 모든 매개변수를 정의할 수 있습니다.  
 ![ecParameters](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-code-6.png)  
+
+취약점의 맥락에서, 공격자는 이 파라미터들을 조작하여 임의의 공개키를 사용하는 인증서를 제작할 수 있습니다. 심지어 이미 알려진 인증서의 공개키를 가진 인증서를 제작할 수도 있습니다. 이는 *named curve*의 모든 다른 파라미터들은 유지하되, 기준점만을 변경함으로 수행할 수 있습니다.  
+공격자는 이제 새롭게 제작한 *신뢰받는* 인증서를 사용할 수 있고 비밀키로 새로운 인증서에 서명할 수 있습니다. 이 인증서 체인을 피해자에게 제공하면 피해자는 인증서 체인을 Windows 인증서 저장소에 포함된 신뢰하는 인증서를 사용하여 검증하려 시도합니다. 이 검증 프로세스는 취약점이 존재하는 곳입니다. 패치에 적용된 변경사항을 확인하여 CryptoAPI의 프로세스를 자세히 살펴보겠습니다.
+
+## 패치 변경점 조사
+Windows CryptoAPI는 여러 라이브러리들을 사용하는데, 취약점은 ``crypt32.dll``에 존재합니다. Bindiff를 사용하여 취약점 패치 이전 가장 최신 버전 (10.0.18362.476)과 패치 적용 버전 (10.0.18362.592)을 살펴 보면 다음과 같습니다.  
+![Bindiff](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-1.png)  
+DLL에서 어느 부분이 변경되었을까요?  
+높은 수준에서, 다섯가지의 가능성 있는 흥미로워보이는 새로운 함수가 새 버전에 추가되었고 다섯가지 함수가 변경되었습니다. 몇가지 새로운 함수가 추가된 경우에, 기존의 함수들이 새로운 함수를 사용하게 바뀌었다고 볼 수 있습니다. 다행히도, Microsoft가 디버깅 심볼을 제공해 주기 때문에, 우리는 함수 이름을 보는 것 만으로 많은 정보를 알아낼 수 있습니다.  
+  
+첫째로, 변경된 함수들의 이름을 확인해 봅시다.  
+![changed function's name](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-2.png)  
+``CCertObject``의 생성자와 소멸자가 바뀐 것을 확인할 수 있습니다. 하지만 ``ChainGetSubjectStatus()``와 ``CCertObjectCache::FindKnownStoreFlags()``가 가장 크게 바뀌었습니다.  
+이제 새로 추가된 함수를 확인해 봅시다.  
+![added functions](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-3.png)  
+Several of the new functions stand out and one in particular serves as a good starting point for analysis. The ChainLogMSRC54294Error() function is a new logging function added to facilitate Windows event logging for potential exploitation attempts. Its purpose can be identified through the presence of the following block:
+몇가지 새로운 함수가 눈에 띕니다. 그 중 조사를 시작하기에 가장 좋아 보이는 함수는 ``ChainLogMSRC54294Error()``이군요. 이 함수는 새로운 로깅 함수인데, exploit 가능성이 높은 시도를 로깅하기 위한 함수입니다. 이 함수의 용도는 다음 블록을 통해 식별할 수 있습니다.  
+![following block](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-4.png)  
+The block passes a string containing the CVE reference associated with this vulnerability to an external library function called CveEventWrite, which is a relatively new Event Tracing API function that writes a CVE-based event to the Windows Event Log.
+이 블록은 CVE 정보를 포함하는 문자열을 라이브러리 외부의 ``CveEventWrite`` 함수에 전달합니다. 이는 Windows 이벤트 로그에 CVE 기반의 이벤트로 기록되게 됩니다.  
+이 정보를 사용해서, 우리는 이 함수의 역참조를 조사하여 어느 상황에 이벤트가 기록되는지 확인할 수 있습니다. 이 경우에, ``ChainLogMSRC54294Error()``을 호출하는 함수는 ``ChainGetSubjectStatus()``가 유일합니다. 이 함수는 이번 패치에서 가장 큰 변화가 있었던 함수입니다.  
+![ChainGetSubjectStatus](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-5.png)  
+새로운 로깅 함수를 호출하는 주변 맥락을 보았을 때, ``CryptVerifyCertificateSignatureEx()``와 ``ChainComparePublicKeyParametersAndBytes()``의 결과에 의해 로깅 함수가 호출되는 것을 알 수 있습니다. 두 함수중 후자는 패치를 통해 추가된 함수입니다. 따라서 ``ChainGetSubjectStatus()``는 패치에 의한 변경점을 조사하기에도, 어느 때에 호출되는지 조사하기에도 적합한 대상으로 볼 수 있습니다.
