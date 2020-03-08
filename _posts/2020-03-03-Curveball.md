@@ -80,6 +80,46 @@ Invoke-Webrequest같은 커맨드를 통해 HTTP over TLS 요청을 서버에게
 **CCertObject**의 생성자는 자신의 필드를 초기화하고, 서명의 해시값, 키 식별자등을 포함하는 **CERT_INFO** 구조체를 자신의 속성에 복사한 뒤 인증서 확장에 속하는 정책이 있는지 찾고, 중요하다고 표시된 인증서 확장이 CryptoAPI에 의해 지원되는지 확인합니다. 그 후 생성자는 ``ChainGetIssuerMatchInfo()``를 인증서에 서명한 키 식별자인 ``CERT_AUTHORITY_KEY_ID_INFO``구조체를 검색하기 위해 호출합니다. 이후 인증서가 *self-signed*인지, 혹은 공개키가 안전하지 않은 길이의 RSA 알고리즘을 사용하는지를 식별합니다.  
 종단 인증서의 **CCertObject**가 생성된 직후 **CChainPathObject**가 생성됩니다. **CChainPathObject**의 초기화가 수행된 후 생성자는 ``CChainPathObject::FindAndAddIssuers()``를 호출합니다. 이 함수는 결과적으로 ``CChainPathObject::FindAndAddIssuersFromStoreByMatchType()``를 호출하고, 종단 인증서의 *Issuer*를 찾습니다. — 일반적으로 종단 인증서의 *Issuer*의 해시값과 일치하는 *Subject*의 해시를 기반으로 탐색합니다. 추가적인 인증서가 *in-memory* 저장소에 있는 경우(즉, 인증서가 종단 인증서와 함께 전송 된 경우), 이번에는 종단 인증서의 *Issuer*의 인증서(즉, *intermediate* 인증서)의 **CERT_INFO** 구조체를 매개변수로 하여 ``ChainCreateCertObject()``를 다시 한 번 호출합니다.  
 이 과정은 재귀적으로 *self-signed*된 인증서(대부분의 경우 *root* 인증서)를 만날때까지 반복됩니다. *Subject*가 *Issuer*와 일치하는지 확인하고, ``CryptVerifyCertificateSignatureEx()``를 호출합니다. 이 함수는 **CERT_INFO** 구조체 내에 있는 **CERT_PUBLIC_KEY_INFO** 구조체를 참조하여 공개키와 키 알고리즘 정보를 획득하여 서명을 검즘합니다. 이후 ``ChainGetSelfSignedStatus()``를 호출합니다.
-Much of the validation is performed within the function I_CryptCNGVerifyEncodedSignature(). If the certificate provides explicit elliptic curve parameters as opposed to a named curve, the function I_ConvertPublicKeyInfoToCNGECCKeyBlobFull() is called to populate a BCRYPT_ECCFULLKEY_BLOB structure containing the curve parameters, a structure which is not formally documented but can be located in the bcrypt.h header of the Windows SDK. These parameters are then used in a call to CNGECCVerifyEncodedSignature(), which calls the bcrypt library function BCryptVerifySignature() to perform the actual verification given the parameters and signature.
 대부분의 유효성 검사는 ``I_CryptCNGVerifyEncodedSignature()``에 의해 수행됩니다. 만일 인증서가 명시적인 타원곡선 파라미터를 제공했다면, 이 함수는 타원곡선 파라미터를 포함하는 **BCRYPT_ECCFULLKEY_BLOB** 구조체를 채웁니다. **BCRYPT_ECCFULLKEY_BLOB** 구조체는 문서화되지는 않았지만 ``bcrypt.h``에 정의되어 있습니다. 이 파라미터들은 ``CNGECCVerifyEncodedSignature()``를 호출되는데 사용됩니다. 이 함수는 bcrypt 라이브러리 함수인 ``BCryptVerifySignature()``를 호출하고, 파라미터들과 서명에 대한 최종적인 검증이 수행됩니다.  
 만일 서명이 성공적으로 검증되었다면, **CChainPathObject**를 생성하기 위해 ``CCertIssuerList::AddIssuer()`` 함수기 호출됩니다. 종단 인증서와 *self-signed* 인증서의 **CChainPathObject**는 ``CCertIssuerList::CreateElement()``를 호출하는데 사용되고, 이 함수는 초기화 후 ``ChainGetSubjectStatus()``를 두 **CChainPathObject**를 사용하여 호출합니다.
+ChainGetSubjectStatus() first calls ChainGetMatchInfoStatus() with the CCertObjects associated with each of the CChainPathObjects, which tests to see if the subjects are the same between the two. It then checks a flag in the CCertObject associated with the end certificate.  
+![test](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-9.png)  
+This flag is initially set to 0 when the CCertObject is created. This leads to a call to CryptVerifyCertificateSignatureEx() in order to verify that the self-signed certificate is a valid issuer of the end certificate.  
+![Figure10](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-10.png)  
+If the signature is deemed valid, the CERT_ISSUER_PUBLIC_KEY_MD5_HASH property is added to the end certificate and the aforementioned flag is set to 3.  
+![test1](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-11.png)  
+Once CCertIssuerList::AddIssuer() returns and all other functions return back to the original CChainPathObject::FindAndAddIssuers() call, the aforementioned flag in the end certificate is checked and, if set, will once again call CChainPathObject::FindAndAddIssuersFromStoreByMatchType() and CChainPathObject::FindAndAddIssuersFromStoreByMatchType().
+
+This time, the collection store containing the system certificate trust list is searched, providing a CERT_STORE_PROV_FIND_INFO structure containing the parameters of the search to FindElementInCollectionStore(), which iterates through the stores in the collection, searching each store for a certificate with an MD5 hash that matches the public key of the self-signed certificate.
+
+If the public key hash matches a certificate found in the system store, ChainCreateCertObject() is once again called, this time with the CERT_CONTEXT structure for the certificate retrieved from the system store, creating a new CCertObject, and in the process applying flags due to the fact that the certificate originated from a “known store.” The object is then added as an issuer object to the CCertObjectCache, and added to the issuer list, once again leading to the creation of a new CChainPathObject and a call to CCertIssuerList::CreateElement() with the CChainPathObjects for the self-signed certificate and the trusted certificate retrieved from the store.
+
+When ChainGetSubjectStatus() is called, the aforementioned flag is now set, causing the previously set CERT_ISSUER_PUBLIC_KEY_MD5_HASH on the self-signed certificate to be checked against the MD5 hash of the public key in the certificate from the trusted store.  
+![Figure12](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-12.png)  
+If there is a match, no further verification of the provided self-signed certificate is performed with respect to the certificate retrieved from the trusted store. This implies that the certificate provided is a trusted self-signed certificate due to the fact it sufficiently matches the certificate retrieved from the certificate store based on the public key hash. In addition, the provided self-signed certificate was successfully used to verify the signature of the end certificate. In cases where an attacker provides a certificate with a public key that is identical to the trusted root certificate and was crafted with explicitly defined elliptic curve parameters, the end certificate signature is effectively trusted as if it were signed by the legitimate root certificate.
+
+This trust is exhibited once all the functions return to CCertChainEngine::CreateChainContextFromPathGraph(). Each object in the certification path (i.e., the end certificate and crafted root certificate) performs additional checks, such as certificate validity with respect to the current time and revocation status. The CERT_CHAIN_CONTEXT structure is then created with a call to CChainPathObject::CreateChainContextFromPath() and the CERT_TRUST_STATUS structure contained within is set to reflect the validity of the certificate chain.
+
+Once the CertGetCertificateChain() function returns, the main application may check the verification status of the certificate chain contained within the CERT_CHAIN_CONTEXT structure, which will show as valid in the described attack scenario.
+![Figure13](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-13.png)
+## 결론
+In summation, our analysis of CVE-2020-0601 brings up the following points:
+* The signature of the end certificate is verified using the crafted root certificate and any elliptic curve parameters included.
+* The signature of the crafted root certificate is verified as a self-signed certificate, again using any elliptic curve parameters included.
+* A matching certificate for the crafted root certificate is located in the system certificate store by using the hash of the public key, which is identical for both the crafted and legitimate root certificate.
+* The hashes of the public key for both the crafted and legitimate root certificate are checked, and if the hashes match, no further verification of the crafted root certificate is performed with respect to the legitimate root certificate, leading to successful verification of the crafted end certificate.  
+How did Microsoft’s patch resolve the vulnerability? In Figure 5 we see that they added a call to the new function ChainComparePublicKeyParametersAndBytes(), replacing the simple comparison between the issuer and trusted root public key hash, which compares the public key parameters and bytes between the trusted root certificate and the certificate that was actually used to verify the signature on the end certificate.
+
+If that comparison fails, CryptVerifySignatureEx() is called to re-verify the signature on the end certificate using the actual trusted root certificate, parameters and all, catching any crafted root certificates with cryptographic parameters that differ from those on the actual trusted certificate.
+
+## Trend Micro의 추천 솔루션
+
+We encourage both individuals and organizations to apply the latest patch from Microsoft as soon as possible to prevent further exploit of CurveBall. Users can also check whether they’re at risk from CVE-2020-0601 via this Vulnerability Assessment Tool.
+
+The Trend Micro™ Deep Security™ and Vulnerability Protection solutions also protect systems and users from threats that exploit CVE-2020-0601 via the following rules:
+
+* 1010130-Microsoft Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601)
+* 1010132-Microsoft Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601) – 1
+Trend Micro™ TippingPoint® customers are protected from threats and attacks that may exploit CVE-2020-0601 via the following MainlineDV filter:
+
+* 36956: HTTP: Microsoft Windows CryptoAPI Spoofing Vulnerability
