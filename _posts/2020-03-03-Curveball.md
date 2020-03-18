@@ -100,23 +100,10 @@ Invoke-Webrequest같은 커맨드를 통해 HTTP over TLS 요청을 서버에게
 ``CertGetCertificateChain()`` 함수가 최종적으로 종료되면, 본 어플리케이션은 **CERT_CHAIN_CONTET**를 체크라여 인증서 체인이 유효한지 검사할 수 있습니다. **CERT_CHAIN_CONTET**는 공격 시나리오에 의해 유효하다고 나타내졌기 때문에 본 어플리케이션은 인증서 체인이 유효하다고 판단하게 됩니다.  
 ![Figure13](https://blog.trendmicro.com/trendlabs-security-intelligence/files/2020/02/curveball-analysis-13.png)
 ## 결론
-In summation, our analysis of CVE-2020-0601 brings up the following points:
-* The signature of the end certificate is verified using the crafted root certificate and any elliptic curve parameters included.
-* The signature of the crafted root certificate is verified as a self-signed certificate, again using any elliptic curve parameters included.
-* A matching certificate for the crafted root certificate is located in the system certificate store by using the hash of the public key, which is identical for both the crafted and legitimate root certificate.
-* The hashes of the public key for both the crafted and legitimate root certificate are checked, and if the hashes match, no further verification of the crafted root certificate is performed with respect to the legitimate root certificate, leading to successful verification of the crafted end certificate.  
-How did Microsoft’s patch resolve the vulnerability? In Figure 5 we see that they added a call to the new function ChainComparePublicKeyParametersAndBytes(), replacing the simple comparison between the issuer and trusted root public key hash, which compares the public key parameters and bytes between the trusted root certificate and the certificate that was actually used to verify the signature on the end certificate.
-
-If that comparison fails, CryptVerifySignatureEx() is called to re-verify the signature on the end certificate using the actual trusted root certificate, parameters and all, catching any crafted root certificates with cryptographic parameters that differ from those on the actual trusted certificate.
-
-## Trend Micro의 추천 솔루션
-
-We encourage both individuals and organizations to apply the latest patch from Microsoft as soon as possible to prevent further exploit of CurveBall. Users can also check whether they’re at risk from CVE-2020-0601 via this Vulnerability Assessment Tool.
-
-The Trend Micro™ Deep Security™ and Vulnerability Protection solutions also protect systems and users from threats that exploit CVE-2020-0601 via the following rules:
-
-* 1010130-Microsoft Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601)
-* 1010132-Microsoft Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601) – 1
-Trend Micro™ TippingPoint® customers are protected from threats and attacks that may exploit CVE-2020-0601 via the following MainlineDV filter:
-
-* 36956: HTTP: Microsoft Windows CryptoAPI Spoofing Vulnerability
+요약하자면, CVE-2020-0601에 대한 분석 결과는 다음과 같습니다.
+* 종단 인증서에 대한 서명은 임의의 타원곡선 파라미터를 갖도록 조작된 루트 인증서에 의해 검증될 수 있습니다.
+* 조작된 루트 인증서의 서명은 역시 임의의 타원곡선 파라미터를 갖는 *self-signed* 인증서 검증 절차를 따릅니다.
+* 조작된 루트 인증서와 동일한 공개키 해시값을 갖는 인증서는 시스템 인증서 저장소에 위치하고 있습니다.
+* 적합한 인증서와 공개키 해시 비교를 통과하면 더이상 조작된 인증서에 대한 추가 검증이 없습니다. 이로 인해 조작된 종단 인증서가 검증을 통과할 수 있습니다.
+Microsoft는 Figure 5에서 볼 수 있는 새로운 함수인 ``ChainComparePublicKeyParametersAndBytes()``를 추가해서 딘순히 *issuer*와 공개키 해시를 비교하는 대신 신뢰하는 루트 인증서와 실제로 종단 인증서에 서명하는데 사용된 인증서 사이에 공개 키 파라미터들과 바이트를 비교함으로써 이 문제를 해결하였습니다.
+만약 둘 사이에 차이가 있을 경우, ``CryptVerifySignatuerEx()``가 종단 인증서의 서명을 다시 검증하기 위해 실제 신뢰하는 루트 인증서와 파라미터를 가지고 호출됩니다.
