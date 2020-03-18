@@ -24,6 +24,7 @@ navbar-links:
   Blog:
     - Writeups: "writeuplist"
     - Paper Summarize: "summarize"
+    - Translation: "번역"
   Projects: "projects"
   Pubilc Key: "publickeys"
   #Resources:
