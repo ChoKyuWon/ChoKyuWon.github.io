@@ -3,7 +3,7 @@ layout: page
 title: Public Keys
 ---
 
-### GPG Public Key
+### GPG Public Key : yyj10137@gmail.com
 ```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -59,7 +59,29 @@ cJP2UsGakA==
 -----END PGP PUBLIC KEY BLOCK-----
 
 ```
-or [here](https://raw.githubusercontent.com/ChoKyuWon/ChoKyuWon.github.io/master/public-key.gpg).
+or [here](https://raw.githubusercontent.com/ChoKyuWon/ChoKyuWon.github.io/master/public-key-yyj10137.gpg).
+
+### GPG Public Key : kyuwoncho18@gmail.com
+```
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mG8EXqVyPBMFK4EEACIDAwR3n/HQeYcouDxgYLGfA2N3Pg9Jzq6YYhiJNNky/oxB
+9IMYDskr/mlMqGaFNEFBUQBDiJzi1o2bwDgHf5s+wLeAbNJ1Uc9w3HmuyGHePmFT
+Inpc89EB6EyRhVCZ+W07WXm0LUNob0t5dVdvbiAoRUNEU0EgS2V5KSA8a3l1d29u
+Y2hvMThAZ21haWwuY29tPoiwBBMTCQA4FiEEZZh2FoR+QYlrz0Zetdu+UvL9GqgF
+Al6lcjwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQtdu+UvL9GqinwQF/
+YOoJNoh81dVC4ZKbxM/pFsE2phW/zx845jLn8dHm1cwlBiS0dMC+jAmZwT8U2ZTj
+AX4x3VsTXwMVIJbYa95kasJQHQmGPbFJMJbNJgpv0CfuKhfCqjOo79hXqt49vpFO
+ca64cwRepXI8EgUrgQQAIgMDBFo4VyBtRTy+8t96DVJLdCrf26hVOGXAIDr/PFoI
+CqP5VKeR1oqrBWukLgDtrwe3XDv7E3N+CsbLDGrTi2eL7WKRV5DRCxOjtkzwnC4A
+hFon7mPbWRw9oXdlNfmFlxyaYgMBCQiImAQYEwkAIBYhBGWYdhaEfkGJa89GXrXb
+vlLy/RqoBQJepXI8AhsMAAoJELXbvlLy/Rqow60BgKu9GWFRdaj1K6iyD/PQtNh/
+vkdsLE1pnq0wvI8ZY486UibFd5fmreKp2+wUFpxTtgF/UZbDePjh06FNlf9NqI5I
+sm+Zyfb98jy1XAtO7ZhEvI6Z896OvTXYGKA1PgHx6Bin
+=msXg
+-----END PGP PUBLIC KEY BLOCK-----
+```
+or [here](https://raw.githubusercontent.com/ChoKyuWon/ChoKyuWon.github.io/master/public-key-kyuwoncho18.gpg)
 
 WoW!
   
