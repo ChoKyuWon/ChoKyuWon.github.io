@@ -23,9 +23,8 @@ The renderer processes are in separate sandboxes and the access to the kernel is
 렌더러 프로세스는 샌드박스에 의해 격리되어 있어 커널로의 접근이 제한되어 있습니다. (리눅스에서는 seccomp filter, 윈도우에서는 [win32 lockdown](https://googleprojectzero.blogspot.com/2016/11/breaking-chain.html) 같은 기법을 사용하여 샌드박스를 구현합니다.) 그 대신 렌더러가 뭔가 필요하면 다른 프로세스에게 다양한 행동을 수행하도록 요청할 수 있습니다. 예를 들어, 이미지를 로드하기 위해서 렌더러 프로세스는 네트워크 서비스에게 이미지를 가져오라고 요청해야 합니다.  
   
   
-The default mechanism for inter process communication in Chrome is called Mojo.
-크롬에서 프로세스간 통신을 위한 기본적인 메커니즘은 Mojo라고 불립니다. 기본적으로 메세지/데이터 파이프와 공유 메모리를 지원하지만 C++, Java, JavaScript 등의 고급 언어 바인딩을 주로 사용합니다. 즉 커스텀 IDL(Interface Deficnition Language) 인터페이스를 만든다면 Mojo가 대부분을 선택된 언어를 위해 생성하고, 당신은 이에 대한 기능만 구현하면 됩니다.
-이를 실제로 확인해보려면 **.mojom IDL** 안의 ``[URLLoaderFactory](https://cs.chromium.org/chromium/src/services/network/public/mojom/url_loader_factory.mojom?l=32&rcl=85c4d882d30b93f615011b036176cd0ce5b791df)``와 [C++ 구현체](https://cs.chromium.org/chromium/src/services/network/url_loader_factory.h?l=43&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9), 그리고 [렌더러 프로세스 Usage](https://cs.chromium.org/chromium/src/services/network/cors/cors_url_loader.cc?l=513&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9)에서 확인할 수 있습니다.
+크롬은 프로세스간 통신을 위한 기본적인 메커니즘으로 Mojo를 사용합니다. 기본적으로 메세지/데이터 파이프와 공유 메모리를 지원하지만 C++, Java, JavaScript 등의 고급 언어 바인딩을 주로 사용합니다. 즉 커스텀 IDL(Interface Deficnition Language) 인터페이스를 만든다면 Mojo가 대부분을 선택된 언어를 위해 생성하고, 당신은 이에 대한 기능만 구현하면 됩니다.
+이를 실제로 확인해보려면 **.mojom IDL** 안의 ``[URLLoaderFactory](https://cs.chromium.org/chromium/src/services/network/public/mojom/url_loader_factory.mojom?l=32&rcl=85c4d882d30b93f615011b036176cd0ce5b791df)``와 [C++ 구현체](https://cs.chromium.org/chromium/src/services/network/url_loader_factory.h?l=43&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9), 그리고 [렌더러 프로세스 사용법](https://cs.chromium.org/chromium/src/services/network/cors/cors_url_loader.cc?l=513&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9)에서 확인할 수 있습니다.
 
 > 원문: Under the hood it supports message/data pipes and shared memory but you would usually use one of the higher level language bindings in C++, Java or JavaScript. That is, you create an interface with methods in a custom interface definition language (IDL), Mojo generates stubs for you in your language of choice and you just implement the functionality.
 > 이에 대한 더 나은 번역이 있다면 제보 바랍니다.
@@ -36,13 +35,10 @@ This is used extensively in the Chrome codebase, i.e. whenever you see a pending
 이것은 크롬 코드베이스에서 광범위하게 사용되고 있습니다. .mojo 파일에서 ``pending_reciver`` 또는 ``pending_remote`` 매개변수를 본다면, 이 기법을 사용중인것입니다.  
 ![chrome](https://lh5.googleusercontent.com/31XSD4o22C2IhMCxB1hz_JZ5xoIMb7EskVpAPPoKzRYXDEU2vEoe3MT2t0FfrCrvpUlFpI3LJJdpd2nbRlJLfEtVn7RhH1AB0WG3Zwydtc6Hyafo1MoX4c1kvQub9Rze8rWtvn5M)  
   
-Under the hood, Mojo uses a platform specific message pipe between processes, or more specifically between nodes in Mojo.
-Two nodes can be connected directly with each other but they don’t have to since Mojo supports message routing.
-One node in the network is called the broker node which has some additional responsibilities to set up node channels and perform some actions restricted by the sandbox.
+Mojo는 프로세스나 특정한 두 노드 사이에 플랫폼 특징적인 메세지 파이프를 사용합니다. 두 노드는 직접적으로 연곃될 수 있지만, Mojo가 메세지 라우팅을 지원하기 때문에 직접 연결은 필요하지 않습니다. 네트워크상의 브로커 노드는 노드간 체널 설정과 샌드박스에 의해 제한된 행동을 수행해야 하는 책임이 있습니다.
+  
 
-The IPC endpoints themselves are called ports.
-In the URLLoaderFactory example above, both the client and the implementation side are identified by a port.
-In code, a port looks like [this](https://cs.chromium.org/chromium/src/mojo/core/ports/port.h?l=64&rcl=20c48eee7403759d676e5d3a125657aaba1a03ca):
+IPC 종단은 포트라고 불립니다. ``URLLoaderFactory``의 예시에서 클라이언트와 구현체는 포트로 구분됩니다. 코드상에서 포트는 [이런 식](https://cs.chromium.org/chromium/src/mojo/core/ports/port.h?l=64&rcl=20c48eee7403759d676e5d3a125657aaba1a03ca)으로 보입니다:
 ```C++
 class Port : public base::RefCountedThreadSafe<Port> {
  public:
