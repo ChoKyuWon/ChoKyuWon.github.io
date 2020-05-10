@@ -9,7 +9,8 @@ title: resume
 <hr/>
 Sungkyunkwan University Suwon, South Korea
 * __Grade__: *Senior Year of College of Software, Bachelor of Software*    Expected
-* __GPA__: 3.4 / 4.5
+* __Major GPA__: 3.65 / 4.5
+* __Cumulative GPA__: 3.39 / 4.5
 * __Honors__: Student's Success Scholarship, Scholarship for Academic Excellence, Scholarship for Start-up Supporting
 * __Coursework__: Computer Security, Operating System, System Program, Introduction to Computer Architectures, Computer Networks, Data Structure, Algorithm, Digital Logic Circuits, Discrete Mathematics, Linear Algebra, Open Source Software Practice, Database, Introduction to Machine Learning
 
