@@ -10,9 +10,13 @@ I am currently BS student at Dept. of Computer Science and Engineering at Sungky
 ### Research Interests
 My research interests include but not limited to:
 - Reverse Engineering X64-86 binary.
-- Fuzzing the kernel.
-- Black box fuzzing.
-- Exploit some vulnerabilities.
+- Hardware Hacking.
+- UEFI, TPM security
+- Digital forensics.
+- Vulnerabilities Exploit.
+- Kernel hacking.
+- TEE(Intel SGX, MIT Sanctum, ARM Trustzone, and so on).
+- RISC-V Processor
 - Blockchain Security.
 
 ### Publications
