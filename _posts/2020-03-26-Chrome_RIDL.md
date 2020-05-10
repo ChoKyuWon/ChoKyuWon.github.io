@@ -19,20 +19,15 @@ TL;DR: 프로세스간 메모리 릭 취액점은 크롬 샌드박스 탈출에 
 ## Background
 크롬 프로세스 모델을 간략화 하면 다음과 같습니다:  
 ![Chrome_process_model](https://lh3.googleusercontent.com/-yYhUafj7Km0tsJ6wpPoQgdiGYALjmKXcwyt3WN_7SMIuidrotWghXewF2PuU0tBoDKixaz_W_kilwGiwSaeE6YGcOr7wFNEqqPT_H0IiZ4IeH2zTgnEISFy40k3252n9AUSKUS4)  
-The renderer processes are in separate sandboxes and the access to the kernel is limited, e.g. via a seccomp filter on Linux or  win32k lockdown on Windows.
 렌더러 프로세스는 샌드박스에 의해 격리되어 있어 커널로의 접근이 제한되어 있습니다. (리눅스에서는 seccomp filter, 윈도우에서는 [win32 lockdown](https://googleprojectzero.blogspot.com/2016/11/breaking-chain.html) 같은 기법을 사용하여 샌드박스를 구현합니다.) 그 대신 렌더러가 뭔가 필요하면 다른 프로세스에게 다양한 행동을 수행하도록 요청할 수 있습니다. 예를 들어, 이미지를 로드하기 위해서 렌더러 프로세스는 네트워크 서비스에게 이미지를 가져오라고 요청해야 합니다.  
   
   
 크롬은 프로세스간 통신을 위한 기본적인 메커니즘으로 Mojo를 사용합니다. 기본적으로 메세지/데이터 파이프와 공유 메모리를 지원하지만 C++, Java, JavaScript 등의 고급 언어 바인딩을 주로 사용합니다. 즉 커스텀 IDL(Interface Deficnition Language) 인터페이스를 만든다면 Mojo가 대부분을 선택된 언어를 위해 생성하고, 당신은 이에 대한 기능만 구현하면 됩니다.
-이를 실제로 확인해보려면 **.mojom IDL** 안의 ``[URLLoaderFactory](https://cs.chromium.org/chromium/src/services/network/public/mojom/url_loader_factory.mojom?l=32&rcl=85c4d882d30b93f615011b036176cd0ce5b791df)``와 [C++ 구현체](https://cs.chromium.org/chromium/src/services/network/url_loader_factory.h?l=43&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9), 그리고 [렌더러 프로세스 사용법](https://cs.chromium.org/chromium/src/services/network/cors/cors_url_loader.cc?l=513&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9)에서 확인할 수 있습니다.
+이를 실제로 확인해보려면 **.mojom IDL** 안의 [``URLLoaderFactory``](https://cs.chromium.org/chromium/src/services/network/public/mojom/url_loader_factory.mojom?l=32&rcl=85c4d882d30b93f615011b036176cd0ce5b791df)와 [C++ 구현체](https://cs.chromium.org/chromium/src/services/network/url_loader_factory.h?l=43&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9), 그리고 [렌더러 프로세스 사용법](https://cs.chromium.org/chromium/src/services/network/cors/cors_url_loader.cc?l=513&rcl=5fa80058135430d5253d4f2912a3bb11c6ecbfa9)에서 확인할 수 있습니다.
 
 > 원문: Under the hood it supports message/data pipes and shared memory but you would usually use one of the higher level language bindings in C++, Java or JavaScript. That is, you create an interface with methods in a custom interface definition language (IDL), Mojo generates stubs for you in your language of choice and you just implement the functionality.
-> 이에 대한 더 나은 번역이 있다면 제보 바랍니다.
 
-One notable feature is that Mojo allows you to forward IPC endpoints over an existing channel.
-한가지 주목해야 할 것은 Mojo가 이미 존재하는 채널에 당신의 IPC 종단을 전달할 수 있게 허용하는 것입니다.(?)
-This is used extensively in the Chrome codebase, i.e. whenever you see a pending_receiver or pending_remote parameter in a .mojom file.
-이것은 크롬 코드베이스에서 광범위하게 사용되고 있습니다. .mojo 파일에서 ``pending_reciver`` 또는 ``pending_remote`` 매개변수를 본다면, 이 기법을 사용중인것입니다.  
+한가지 주목해야 할 Mojo의 기능은 IPC 종단에 이미 존재하는 체널을 통해서 메세지를 전달할 수 있게 허용하는 것입니다. 이것은 크롬 코드베이스에서 광범위하게 사용되고 있습니다. .mojo 파일에서 ``pending_reciver`` 또는 ``pending_remote`` 매개변수를 본다면, 이 기법을 사용중인것입니다.  
 ![chrome](https://lh5.googleusercontent.com/31XSD4o22C2IhMCxB1hz_JZ5xoIMb7EskVpAPPoKzRYXDEU2vEoe3MT2t0FfrCrvpUlFpI3LJJdpd2nbRlJLfEtVn7RhH1AB0WG3Zwydtc6Hyafo1MoX4c1kvQub9Rze8rWtvn5M)  
   
 Mojo는 프로세스나 특정한 두 노드 사이에 플랫폼 특징적인 메세지 파이프를 사용합니다. 두 노드는 직접적으로 연곃될 수 있지만, Mojo가 메세지 라우팅을 지원하기 때문에 직접 연결은 필요하지 않습니다. 네트워크상의 브로커 노드는 노드간 체널 설정과 샌드박스에 의해 제한된 행동을 수행해야 하는 책임이 있습니다.
@@ -56,3 +51,16 @@ class Port : public base::RefCountedThreadSafe<Port> {
   // [...]
 }
 ```
+``peer_node_name``과 ``peer_port_name``은 둘 다 128비트의 랜덤 인티저를 주소로 사용합니다.
+If you send a message to a port, it will first forward it to the right node and the receiving node will look up the port name in a map of local ports and put the message into the right message queue.
+포트에 메세지를 전달할 떄, 메세지는 우선 right 노드로 전달되고 receiving 노드는 포트 이름을 로컬 포트 맵에서 룩업하고 메세지를 right 메세지 큐에 넣습니다.
+
+Of course this means that if you have an info leak vulnerability in the browser process, you can leak port names and use them to inject messages into privileged IPC channels.
+And in fact, this is called out in the security section of the Mojo core documentation:
+> “[...] any Node can send any Message to any Port of any other Node so long as it has knowledge of the Port and Node names. [...] It is therefore important not to leak Port names into Nodes that shouldn't be granted the corresponding Capability.”
+A good example of a bug that can be easily exploited to leak port numbers was crbug.com/779314 by @NedWilliamson. It was an integer overflow in the blob implementation which allowed you to read an arbitrary amount of heap memory in front of a blob in the browser process. The exploit would then look roughly as follows:
+Compromise the renderer.
+Use the blob bug to leak heap memory.
+Search through the memory for ports (a valid state + 16 high entropy bytes).
+Use the leaked ports to inject a message into a privileged IPC connection.
+Next, we’ll look at two things. How to replace step 2. and 3. above with a CPU bug and what kind of primitives we can gain via privileged IPC connections.
