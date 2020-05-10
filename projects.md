@@ -5,11 +5,21 @@ subtitle: Projects which I've doing or done.
 ---
 
 ### - Done!
-<hr>
+<hr/>
 __Co-op with Microsoft__		Suwon, Korea  
 *Industry-University cooperation*		[04. 2017] – [12. 2017]  
 * Studied Cloud Platform Service such as Microsoft Azure, Amazon Web Service, Google Cloud Platform.
 * Researched usage of blockchain using Microsoft Azure.
-<hr>
+<hr/>
+__Windows 10 DPAPI Masterkey Extract__		Suwon, Korea  
+[04. 2019] – [12. 2019]  
+* Windows 10 kernel debugging
+* DP(Data Protection)API Masterkey extraction with victim's file
+<hr/>
 ### - Doing!
-* top secrete
+<hr/>
+__Shadow breaker - password cracker with RUST__		Suwon, Korea  
+[04. 2020] – [present]
+* Toy project to crack password on shadow file
+* https://github.com/ChoKyuWon/shadowbreaker
+<hr/>
