@@ -54,13 +54,15 @@ class Port : public base::RefCountedThreadSafe<Port> {
 ``peer_node_name``과 ``peer_port_name``은 둘 다 128비트의 랜덤 인티저를 주소로 사용합니다.
 If you send a message to a port, it will first forward it to the right node and the receiving node will look up the port name in a map of local ports and put the message into the right message queue.
 포트에 메세지를 전달할 떄, 메세지는 우선 right 노드로 전달되고 receiving 노드는 포트 이름을 로컬 포트 맵에서 룩업하고 메세지를 right 메세지 큐에 넣습니다.
+  
+  
+이것은 브라우저 프로세스에 인포릭 취약점이 존재한다면 포트 이름을 알아낼 수 있고 결과적으로 높은 권한의 IPC 채널에 메세지를 삽입할 수 있다는 것을 의미합니다. 실제로 이것은 Mojo 코어 문서에 보안 섹션에 설명되어 있습니다:
+> “[...] 어떤 노드가 포트와 노드의 이름을 안다면 그 포트에 임의의 메세지를 전송할 수 있습니다. [...] 따라서 적합한 권한이 없는 노드에게 포트의 이름이 유출되지 않는 것이 중요합니다.”
+포트 번호를 유출할 수 있는 쉽게 익스플로잇될 수 있는 버그의 좋은 예시는 @NedWilliamson에 의해 밝혀진 (crbug.com/779314) 입니다. 이 버그는 브라우저 프로세스의 blob 앞의 힙 영역에서 임의의 크기만큼 읽기를 허용하는 blob 구현체에서의 인티저 오버플로우입니다. 이 버그는 대략적으로 다음과 같이 작동합니다:
+  1. 렌더러를 컴프로마이즈한다.
+  2. blob 버그를 사용하여 힙 메모리를 유출한다.
+  3. 메모리 영역에서 (유효한 상태 + 높은 엔트로피를 가진 16바이트 데이터)로 이루어진 포트를 탐색한다.
+  4. 유출된 포트를 사용하여 높은 권한의 IPC 연결에 메세지를 삽입한다.
+다음으로, 우리는 어떻게 스탭 2와 3을 CPU 취약점으로 대체할 수 있는지와 높은 인가받은 IPC 연결에 메세지를 보내면 어떤 것들을 할 수 있는지를 살펴 볼 것입니다.
 
-Of course this means that if you have an info leak vulnerability in the browser process, you can leak port names and use them to inject messages into privileged IPC channels.
-And in fact, this is called out in the security section of the Mojo core documentation:
-> “[...] any Node can send any Message to any Port of any other Node so long as it has knowledge of the Port and Node names. [...] It is therefore important not to leak Port names into Nodes that shouldn't be granted the corresponding Capability.”
-A good example of a bug that can be easily exploited to leak port numbers was crbug.com/779314 by @NedWilliamson. It was an integer overflow in the blob implementation which allowed you to read an arbitrary amount of heap memory in front of a blob in the browser process. The exploit would then look roughly as follows:
-Compromise the renderer.
-Use the blob bug to leak heap memory.
-Search through the memory for ports (a valid state + 16 high entropy bytes).
-Use the leaked ports to inject a message into a privileged IPC connection.
-Next, we’ll look at two things. How to replace step 2. and 3. above with a CPU bug and what kind of primitives we can gain via privileged IPC connections.
+## RIDL
