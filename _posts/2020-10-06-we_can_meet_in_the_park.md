@@ -9,7 +9,7 @@ comments: true
 ---
 
 Use meet-in-the-middle attack.
-```Python3
+```python
 from Crypto.Cipher import AES
 import hashlib
 
