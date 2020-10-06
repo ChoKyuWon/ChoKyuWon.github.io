@@ -36,13 +36,11 @@ def Check(buf, ml, cl):
         memo2.append(aes2.decrypt(ENCRYPTED[0:16]))
 
 def key2buf(key):
-    print(key)
     n0 = key % 100
     n1 = int(key/100) % 100
     n2 = int(key/(100**2)) % 100
     n3 = int(key/(100**3)) % 100
     buf = [n3,n2,n1,n0]
-    print(buf)
     return bytes(buf)
 
 def main():
