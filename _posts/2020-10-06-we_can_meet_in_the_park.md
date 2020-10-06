@@ -48,17 +48,11 @@ def key2buf(key):
 def main():
     buf = [0,0,0,0]
     Check(buf, 3, 0)
-    f = open('memo1', 'w')
-    f.write(memo1)
-    f = open('memo2', 'w')
-    f.write(memo2)
+    
     mitm = list(set(memo1)&set(memo2))[0]
 
     key1 = memo1.index(mitm)
     key2 = memo2.index(mitm)
-
-    print('a key is', memo1.index(mitm))
-    print('b key is', memo2.index(mitm))
 
     aes1 = AES.new(hashlib.sha256(key2buf(key1)).digest(), AES.MODE_ECB)
     aes2 = AES.new(hashlib.sha256(key2buf(key2)).digest(), AES.MODE_ECB)
