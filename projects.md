@@ -17,9 +17,4 @@ __Windows 10 DPAPI Masterkey Extract__		Suwon, Korea
 * DP(Data Protection)API Masterkey extraction with victim's file
 <hr/>
 ### - Doing!
-<hr/>
-__Shadow breaker - password cracker with RUST__	  
-[04. 2020] – [present]
-* Toy project to crack password on shadow file
-* https://github.com/ChoKyuWon/shadowbreaker
-<hr/>
+
