@@ -39,7 +39,7 @@ As these snapshots for U-Boot were built on Linux, we know they are going to be 
 ```
 import cpp
 from Macros m
-where m.getName() = "ntoh.*"
+where m.getName() = "ntoh(l|ll|s)"
 select m
 ```
 처음에는 정규표현식으로 ntoh[\w]* 같은걸 시도해봤는데 잘 동작하지 않아 이것저것 시험해보다 위와 같은 문법이 동작하였다.
