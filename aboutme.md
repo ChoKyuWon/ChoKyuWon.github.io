@@ -9,17 +9,14 @@ I am currently a Ph.D. student at SSLAB(System Security Lab) at Dept. of Compute
 
 ### Research Interests
 My research interests include but are not limited to:
-- Kernel hacking.
-- Fuzzing.
-- Hypervisor.
-- Reverse Engineering X64-86 binary.
-- UEFI, TPM security
-- Vulnerabilities Exploit.
-- TEE(Intel SGX, MIT Sanctum, ARM Trustzone, and so on).
-- Disaggregated computing
+- Software testing (Fuzzing, Sanitizer, etc.)
+- Hardware-accelerated Security (e.g., ARM PAC, MTE)
+- Compiler for security
+- System security (Kernel, Hypervisor)
+- Programming langauge
 
 
 
 <hr>
 
-More detailed information is available in the [resume](https://chokyuwon.github.io/resume/) or [Google Scholar](https://scholar.google.com/citations?user=AjgaSMoAAAAJ).
+More detailed information is available in the [Resume](https://chokyuwon.github.io/resume/) or [Google Scholar](https://scholar.google.com/citations?user=AjgaSMoAAAAJ).
