@@ -16,7 +16,7 @@ Sungkyunkwan University Suwon, South Korea
 * M.S in Sungkyunkwan University Suwon, South Korea [2021-2023]
     * __Affiliation__: *College of Software*
     * __GPA__: 4.0 / 4.5
-    * __Master's Thesis__: TBA
+    * __Master's Thesis__: Retrofitting the Address Sanitizer for Rust by Program Analysis
 
 * B.S in Sungkyunkwan University Suwon, South Korea [2017-2021]
     * __Affiliation__: *College of Software*
@@ -29,7 +29,9 @@ Sungkyunkwan University Suwon, South Korea
 * Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures (CCS' 2023)
   * Kha Dinh Duy, **Kyuwon Cho**, Taehyun Noh, Hojoon Lee
   * [Full Paper](https://dl.acm.org/doi/10.1145/3576915.3623079), [*Distinguished Paper Award*](https://github.com/ChoKyuWon/ChoKyuWon.github.io/blob/master/_data/Distinguished%20Paper%20Award%2C%20Capacity.pdf)
-
+* RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust (Usenix Security' 2024, to appear)
+    * **Kyuwon Cho**, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee
+    * [Full Paper]()
 ## Experience
 <hr/>
 __2017 SKKU BugBounty__    Suwon, South Korea  
