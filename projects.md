@@ -8,7 +8,7 @@ subtitle: Projects which I've doing or done.
 <hr/>
 __Co-op with Microsoft__		Suwon, Korea  
 *Industry-University cooperation*		[04. 2017] – [12. 2017]  
-* Studied Cloud Platform Service such as Microsoft Azure, Amazon Web Service, Google Cloud Platform.
+* Studied cloud platform services such as Microsoft Azure, Amazon Web Service(AWS), Google Cloud Platform(GCP).
 * Researched usage of blockchain using Microsoft Azure.
 <hr/>
 __Windows 10 DPAPI Masterkey Extract__		Suwon, Korea  
@@ -18,6 +18,6 @@ __Windows 10 DPAPI Masterkey Extract__		Suwon, Korea
 <hr/>
 ### - Doing!
 <hr/>
-__CAPACETI:CAPability-based Pointer Authenticated Code access control EnforcemenTInfrastructure__
-* Using PAC(Pointer Authenticae Code) to protect some data with capability model
-* Modify Linux kernel
+__Rust Security(ASAN & Fuzzing)__
+* Improve the ASAN performance on Rust programs
+* Compiler and program analysis
