@@ -16,7 +16,7 @@ Sungkyunkwan University Suwon, South Korea
 * M.S in Sungkyunkwan University Suwon, South Korea [2021-2023]
     * __Affiliation__: *College of Software*
     * __GPA__: 4.0 / 4.5
-    * __Master's Thesis__: Retrofitting the Address Sanitizer for Rust by Program Analysis
+    * __Master's Thesis__: [Retrofitting the Address Sanitizer for Rust by Program Analysis](https://dcollection.skku.edu/srch/srchDetail/000000174979)
 
 * B.S in Sungkyunkwan University Suwon, South Korea [2017-2021]
     * __Affiliation__: *College of Software*
