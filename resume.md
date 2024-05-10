@@ -26,12 +26,12 @@ Sungkyunkwan University Suwon, South Korea
     * __Coursework__: Computer Security, Operating System, System Program, Introduction to Computer Architectures, Computer Networks, Data Structure, Algorithm, Digital Logic Circuits, Discrete Mathematics, Linear Algebra, Open Source Software Practice, Database, Introduction to Machine Learning
 
 ## Publication
+* RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust (Usenix Security' 2024)
+    * **Kyuwon Cho**, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee
+    * [Full Paper](https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon)
 * Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures (CCS' 2023)
   * Kha Dinh Duy, **Kyuwon Cho**, Taehyun Noh, Hojoon Lee
   * [Full Paper](https://dl.acm.org/doi/10.1145/3576915.3623079), [*Distinguished Paper Award*](https://github.com/ChoKyuWon/ChoKyuWon.github.io/blob/master/_data/Distinguished%20Paper%20Award%2C%20Capacity.pdf)
-* RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust (Usenix Security' 2024, to appear)
-    * **Kyuwon Cho**, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee
-    * [Full Paper]()
 ## Experience
 <hr/>
 __2017 SKKU BugBounty__    Suwon, South Korea  
