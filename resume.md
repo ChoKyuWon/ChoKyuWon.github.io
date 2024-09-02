@@ -32,6 +32,7 @@ Sungkyunkwan University Suwon, South Korea
 * Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures (CCS' 2023)
   * Kha Dinh Duy, **Kyuwon Cho**, Taehyun Noh, Hojoon Lee
   * [Full Paper](https://dl.acm.org/doi/10.1145/3576915.3623079), [*Distinguished Paper Award*](https://github.com/ChoKyuWon/ChoKyuWon.github.io/blob/master/_data/Distinguished%20Paper%20Award%2C%20Capacity.pdf)
+
 ## Experience
 <hr/>
 __2017 SKKU BugBounty__    Suwon, South Korea  

@@ -16,6 +16,14 @@ My research interests include but are not limited to:
 - Programming langauge
 
 
+### Publication
+* RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust (Usenix Security' 2024)
+    * **Kyuwon Cho**, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee
+    * [Full Paper](https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon)
+* Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures (CCS' 2023)
+  * Kha Dinh Duy, **Kyuwon Cho**, Taehyun Noh, Hojoon Lee
+  * [Full Paper](https://dl.acm.org/doi/10.1145/3576915.3623079), [*Distinguished Paper Award*](https://github.com/ChoKyuWon/ChoKyuWon.github.io/blob/master/_data/Distinguished%20Paper%20Award%2C%20Capacity.pdf)
+
 
 <hr>
 
