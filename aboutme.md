@@ -2,6 +2,7 @@
 layout: page
 title: About me
 subtitle: About all myself
+use-site-title: true
 ---
 
 ### About Me
