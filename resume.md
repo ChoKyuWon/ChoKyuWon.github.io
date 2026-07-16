@@ -9,23 +9,22 @@ title: resume
 ## Education
 
 Sungkyunkwan University Suwon, South Korea
-* 1st year Ph.D. student in [SSLAB](https://sslab.skku.edu), advised by [Hojoon Lee](https://hojoon-lee.github.io/)
+* Ph.D. candidate in [SSLAB](https://sslab.skku.edu), advised by [Hojoon Lee](https://hojoon-lee.github.io/)
 * __Affiliation__: *College of Software and Informatics*
 <hr/>
 
 * M.S in Sungkyunkwan University Suwon, South Korea [2021-2023]
     * __Affiliation__: *College of Software*
-    * __GPA__: 4.0 / 4.5
     * __Master's Thesis__: [Retrofitting the Address Sanitizer for Rust by Program Analysis](https://dcollection.skku.edu/srch/srchDetail/000000174979)
 
 * B.S in Sungkyunkwan University Suwon, South Korea [2017-2021]
     * __Affiliation__: *College of Software*
-    * __Major GPA__: 3.62 / 4.5
-    * __Cumulative GPA__: 3.35 / 4.5
     * __Honors__: Student's Success Scholarship, Scholarship for Academic Excellence, Scholarship for Start-up Supporting
-    * __Coursework__: Computer Security, Operating System, System Program, Introduction to Computer Architectures, Computer Networks, Data Structure, Algorithm, Digital Logic Circuits, Discrete Mathematics, Linear Algebra, Open Source Software Practice, Database, Introduction to Machine Learning
 
 ## Publication
+* eMPAC: Unlocking Full Potential of Pointer Authentication in Microcontrollers with Fat Pointers (ESORICS '26, to appear)
+    * Sungsoo Kim, Jihoon Kim, **Kyuwon Cho**, and Hojoon Lee
+    * [Full Paper]()
 * RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust (Usenix Security' 2024)
     * **Kyuwon Cho**, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee
     * [Full Paper](https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon)
@@ -69,6 +68,10 @@ __Interests:__ Magic:The Gathering, Board Game, Reading books
 * LLVM
     * [Commits](https://github.com/llvm/llvm-project/commits?author=ChoKyuWon)
         * [https://reviews.llvm.org/D142844](https://reviews.llvm.org/D142844)
+    * [Bug finding](https://github.com/llvm/llvm-project/issues?q=author%3AChoKyuWon%20type%3ABug)
+        * [Crashes](https://github.com/llvm/llvm-project/issues?q=author%3AChoKyuWon%20label%3Acrash)
+        * [Miscompilation](https://github.com/llvm/llvm-project/issues?q=author%3AChoKyuWon%20label%3Amiscompilation)
+            * [llvm/llvm-project#210093](https://github.com/llvm/llvm-project/issues/210093)
 * uftrace
     * [Commits](https://github.com/namhyung/uftrace/commits?author=ChoKyuWon)
         * [namhyung/uftrace/pull/1625](https://github.com/namhyung/uftrace/pull/1625)
