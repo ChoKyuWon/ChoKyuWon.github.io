@@ -65,6 +65,9 @@ __Interests:__ Magic:The Gathering, Board Game, Reading books
 * Rust
     * [Commits](https://github.com/rust-lang/rust/commits?author=ChoKyuWon)  
        * [rust-lang/rust/pull/113814](https://github.com/rust-lang/rust/pull/113814)
+   * Bug finding
+       * [ICE](https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AI-ICE%20author%3A%40me)
+           * [rust-lang/rust#129169](https://github.com/rust-lang/rust/issues/129169)
 * LLVM
     * [Commits](https://github.com/llvm/llvm-project/commits?author=ChoKyuWon)
         * [https://reviews.llvm.org/D142844](https://reviews.llvm.org/D142844)
@@ -72,10 +75,4 @@ __Interests:__ Magic:The Gathering, Board Game, Reading books
         * [Crashes](https://github.com/llvm/llvm-project/issues?q=author%3AChoKyuWon%20label%3Acrash)
         * [Miscompilation](https://github.com/llvm/llvm-project/issues?q=author%3AChoKyuWon%20label%3Amiscompilation)
             * [llvm/llvm-project#210093](https://github.com/llvm/llvm-project/issues/210093)
-* uftrace
-    * [Commits](https://github.com/namhyung/uftrace/commits?author=ChoKyuWon)
-        * [namhyung/uftrace/pull/1625](https://github.com/namhyung/uftrace/pull/1625)
-        * [namhyung/uftrace/pull/1759](https://github.com/namhyung/uftrace/pull/1759)
-* SVF
-    * [Commits](https://github.com/SVF-tools/SVF/commits?author=ChoKyuWon)
-        * [SVF-tools/SVF/pull/992](https://github.com/SVF-tools/SVF/pull/992)
+            * [llvm/llvm-project#210177](https://github.com/llvm/llvm-project/issues/210177)
