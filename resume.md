@@ -66,8 +66,10 @@ __Interests:__ Magic:The Gathering, Board Game, Reading books
     * [Commits](https://github.com/rust-lang/rust/commits?author=ChoKyuWon)  
        * [rust-lang/rust/pull/113814](https://github.com/rust-lang/rust/pull/113814)
    * Bug finding
-       * [ICE](https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AI-ICE%20author%3A%40me)
+       * [ICE](https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AI-ICE%20author%3AChoKyuWon)
            * [rust-lang/rust#129169](https://github.com/rust-lang/rust/issues/129169)
+       * [Miscompilation](https://github.com/rust-lang/rust/issues?q=is%3Aissue%20label%3AI-miscompile%20author%3AChoKyuWon)
+           * [rust-lang/rust#159591](https://github.com/rust-lang/rust/issues/159591)
 * LLVM
     * [Commits](https://github.com/llvm/llvm-project/commits?author=ChoKyuWon)
         * [https://reviews.llvm.org/D142844](https://reviews.llvm.org/D142844)
