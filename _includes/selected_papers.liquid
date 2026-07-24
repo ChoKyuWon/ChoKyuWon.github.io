@@ -1,0 +1,12 @@
+{%- comment -%}
+  Local override of al_folio_core _includes/selected_papers.liquid.
+  Renders home-page selected publications from _data/papers.yml instead of jekyll-scholar.
+{%- endcomment -%}
+<div class="publications">
+  {%- assign selected_papers = site.data.papers | where: "selected", true | sort: "year" | reverse -%}
+  <ol class="bibliography">
+    {%- for paper in selected_papers -%}
+      <li>{% include paper_entry.liquid paper=paper %}</li>
+    {%- endfor -%}
+  </ol>
+</div>

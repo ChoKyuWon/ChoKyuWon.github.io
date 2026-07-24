@@ -1,0 +1,33 @@
+{%- comment -%}
+  Renders a single publication card from _data/papers.yml.
+  Usage: {% include paper_entry.liquid paper=paper %}
+{%- endcomment -%}
+{%- assign paper = include.paper -%}
+<div class="row">
+  <div class="col col-sm-2 abbr">
+    {%- if paper.abbr -%}
+      <abbr class="badge rounded w-100">{{ paper.abbr }}</abbr>
+    {%- endif -%}
+  </div>
+  <div id="{{ paper.key }}" class="col col-sm-10">
+    <div class="title">{{ paper.title }}</div>
+    <div class="author">{{ paper.authors }}</div>
+    <div class="periodical">
+      <em>{{ paper.venue }}</em>{% if paper.year %}, {{ paper.year }}{% endif %}{% if paper.note %} <span class="periodical-note">({{ paper.note }})</span>{% endif %}
+    </div>
+    <div class="links">
+      {%- for link in paper.links -%}
+        <a href="{{ link[1] }}" class="btn btn-sm z-depth-0" role="button" target="_blank" rel="noopener noreferrer">{{ link[0] }}</a>
+      {%- endfor -%}
+      {%- if paper.award -%}
+        <span class="award btn btn-sm z-depth-0">{{ paper.award }}</span>
+      {%- endif -%}
+    </div>
+    {%- if paper.bibtex -%}
+      <details class="publication-bibtex mt-2">
+        <summary>BibTeX</summary>
+        <pre><code class="language-bibtex">{{ paper.bibtex | strip | xml_escape }}</code></pre>
+      </details>
+    {%- endif -%}
+  </div>
+</div>
