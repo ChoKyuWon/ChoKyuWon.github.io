@@ -74,54 +74,20 @@ cv:
         url: https://dl.acm.org/doi/10.1145/3576915.3623079
         releaseDate: 2023
 
-    Experience:
-      - company: SKKU BugBounty
-        position: "Incentive Award"
-        location: Suwon, South Korea
-        start_date: 2017
-        end_date: 2017
-        highlights:
-          - "Found and exploited real web vulnerabilities: cookie reuse, SQL injection, e-mail forwarding, password change."
-
-      - company: Microsoft (Industry–University Cooperation Co-op)
-        position: Research Intern
-        location: Suwon, South Korea
-        start_date: 2017
-        end_date: 2017
-        highlights:
-          - "Studied cloud platform services: Microsoft Azure, AWS, GCP."
-          - "Researched blockchain use cases on Microsoft Azure."
-
-      - company: Windows 10 DPAPI Masterkey Extraction
-        position: Researcher
-        location: Suwon, South Korea
-        start_date: 2019
-        end_date: 2019
-        highlights:
-          - "Windows 10 kernel debugging."
-          - "Data Protection API (DPAPI) masterkey extraction from a victim's files."
-
-      - company: SKKU BugBounty
-        position: "3rd Award"
-        location: Suwon, South Korea
-        start_date: 2021
-        end_date: 2021
-        highlights:
-          - "Found and exploited real web vulnerabilities across multiple classes."
+    # Experience is hidden until there is job experience to list.
+    # To show this section again, uncomment and fill in the entries below.
+    # Experience:
+    #   - company: Company Name
+    #     position: Your Role
+    #     location: City, Country
+    #     start_date: 2026
+    #     end_date: present
+    #     highlights:
+    #       - What you did here.
 
     Open Source:
-      - name: "Rust (rust-lang/rust)"
-        summary: "Compiler contributions and bug reports."
-        highlights:
-          - "Pull request: rust-lang/rust#113814"
-          - "Internal Compiler Errors (I-ICE), e.g. rust-lang/rust#129169"
-          - "Miscompilations (I-miscompile), e.g. rust-lang/rust#159591"
-
-      - name: "LLVM (llvm/llvm-project)"
-        summary: "Compiler contributions and bug reports."
-        highlights:
-          - "Commit: reviews.llvm.org/D142844"
-          - "Crashes and miscompilations, e.g. llvm/llvm-project#210093, #210177"
+      - bullet: "**Rust** ([rust-lang/rust](https://github.com/rust-lang/rust/commits?author=ChoKyuWon)) — merged compiler [PR #113814](https://github.com/rust-lang/rust/pull/113814); reported Internal Compiler Errors (e.g. [#129169](https://github.com/rust-lang/rust/issues/129169)) and miscompilations (e.g. [#159591](https://github.com/rust-lang/rust/issues/159591))."
+      - bullet: "**LLVM** ([llvm/llvm-project](https://github.com/llvm/llvm-project/commits?author=ChoKyuWon)) — landed [D142844](https://reviews.llvm.org/D142844); reported crashes and miscompilations (e.g. [#210093](https://github.com/llvm/llvm-project/issues/210093), [#210177](https://github.com/llvm/llvm-project/issues/210177))."
 
     Skills:
       - name: Programming Languages
