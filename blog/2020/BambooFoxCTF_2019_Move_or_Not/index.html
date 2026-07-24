@@ -1,0 +1,262 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Move or Not | ChoKyuWon's Ark </title> <meta name="author" content="Kyuwon Cho"> <meta name="description" content="BambooFox CTF 2019 Writeup"> <meta name="keywords" content="systems security, software security, fuzzing, sanitizer, ARM PAC, Rust, compiler security, Kyuwon Cho"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://chokyuwon.github.io/blog/2020/BambooFoxCTF_2019_Move_or_Not/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> ChoKyuWon's Ark </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item "> <a class="nav-link" href="/publickeys/">public keys </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Move or Not</h1> <p class="post-meta"> Created on January 02, 2020 </p> <p class="post-tags"> <a href="/blog/2020"> <i class="fa-solid fa-calendar fa-sm"></i> 2020 </a>   ·   <a href="/blog/tag/writeup"> <i class="fa-solid fa-hashtag fa-sm"></i> writeup</a>   ·   <a href="/blog/category/writeup"> <i class="fa-solid fa-tag fa-sm"></i> writeup</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <h1 id="move-or-not">Move or Not</h1> <p>use IDA to decompile it.</p> <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">__int64</span> <span class="kr">__fastcall</span> <span class="nf">main</span><span class="p">(</span><span class="n">__int64</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a2</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a3</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">v4</span><span class="p">;</span> <span class="c1">// [rsp+8h] [rbp-38h]</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [rsp+Ch] [rbp-34h]</span>
+  <span class="kt">char</span> <span class="n">s2</span><span class="p">;</span> <span class="c1">// [rsp+10h] [rbp-30h]</span>
+  <span class="kt">unsigned</span> <span class="n">__int64</span> <span class="n">v7</span><span class="p">;</span> <span class="c1">// [rsp+38h] [rbp-8h]</span>
+
+  <span class="n">v7</span> <span class="o">=</span> <span class="n">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
+  <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"First give me your password: "</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v4</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">v4</span> <span class="o">!=</span> <span class="mi">98416</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You don't know static analysis !"</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Second give me your key: "</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v4</span><span class="p">);</span>
+  <span class="n">v4</span> <span class="o">-=</span> <span class="mi">49</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">11</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+    <span class="o">*</span><span class="p">((</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)</span><span class="n">unknown_function</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">+=</span> <span class="n">v4</span><span class="p">;</span>
+  <span class="n">unknown_function</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Then Verify your flag: "</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You are right. Congratulations !!"</span><span class="p">);</span>
+  <span class="k">else</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You don't know dynamic analysis !"</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0LL</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div> <p>So easily find first key is hardcoded value, <code class="language-plaintext highlighter-rouge">98416</code>. But Second key is seem more complex. It input some value on v4, and add it to <code class="language-plaintext highlighter-rouge">unknown_function</code>’s first 11byte. Second key must 1byte, 0x00 to 0xFF, but don’t know exact value. Via some test, I know the second key is ‘2’, 50. If I can set breakpoint on strcmp, I can see what is s1 directly, but I can’t.(It may because of ASLR, but don’t know exact reason). So I reverse it only static analyse.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>objdump -s -j .data ./pro
+</code></pre></div></div> <p>To see data section in binary, I use this command and see <code class="language-plaintext highlighter-rouge">unknown_function</code> is folloing value:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7f2e264782c6007f061f4782c701802f0b4883c70180070d4883c7018007414883c701802f0d4883c7018007204883c70180073c4883c7018007484883c70180076f4883c70180073b4883c7018007594883c7018007464883c701802f144883c7018007084883c7018007014883c7018007314883c7018007184883c701802f094883c7018007114883c701802f054883c701802f454883c70180071a4883c70180072d4883c701802f0b4883c7018007554883c7018007184883c7018007194883c701802f3b4883c701802f094883c7018007084883c701800758c3
+</code></pre></div></div> <p>and to make analyse easier, I want to make original asm, and make following code.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">pro.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">asm1</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">readline</span><span class="p">()</span> <span class="c1"># first 11 byte of unknown_function
+</span>    <span class="n">asm2</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">readline</span><span class="p">()</span> <span class="c1"># and rest parts of unknown_function
+</span>
+<span class="n">asm1arry</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">asm1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">asm1arry</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">asm1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">newasma</span> <span class="o">=</span> <span class="sh">""</span>
+<span class="k">for</span> <span class="n">asm</span> <span class="ow">in</span> <span class="n">asmarry</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nf">format</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">asm</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">'</span><span class="s">x</span><span class="sh">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="sh">'</span><span class="s">0</span><span class="sh">'</span> <span class="o">+</span> <span class="n">n</span>
+    <span class="n">newasmarray</span> <span class="o">+=</span> <span class="n">n</span>
+<span class="n">newasm</span> <span class="o">+=</span> <span class="n">asm2</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">newasm</span><span class="p">)</span>
+</code></pre></div></div> <p>And I use <a href="https://defuse.ca/online-x86-assembler.htm" rel="external nofollow noopener" target="_blank">online assembler</a>. (After CTF, I realize modify binary and open it via IDA is perfect way, but during CTF, I use online assembler and analyze assembler.) Via assembly, I see <code class="language-plaintext highlighter-rouge">unknown_function</code> is used to encrypt flag by add or subtract some value on each flag byte. So I collect encrypted flag(s1) and key. Make python script to collect key is very graceful way, but key length is only 32byte so I just make key by my hand.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s1</span> <span class="o">=</span> <span class="sh">'</span><span class="s">69417855 2e7c2633 300c2920 2848656832473a62 64795246 3b0a4f59 6e3d6c25</span><span class="sh">'</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span>
+<span class="n">enc_flag</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">enc_flag</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0x20</span><span class="p">,</span><span class="o">-</span><span class="mh">0xb</span><span class="p">,</span><span class="mh">0xd</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span><span class="o">-</span><span class="mh">0xd</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">,</span> <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x6f</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x59</span><span class="p">,</span> <span class="mh">0x46</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x9</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x5</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x1a</span><span class="p">,</span> <span class="mh">0x2d</span><span class="p">,</span> <span class="o">-</span><span class="mh">0xb</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x3b</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x9</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">,</span> <span class="mh">0x58</span><span class="p">]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="sh">""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+    <span class="n">flag</span> <span class="o">+=</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">enc_flag</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</code></pre></div></div> <p>So this is decrypt function, and flag is: <code class="language-plaintext highlighter-rouge">BambooFox{dyn4mic_1s_4ls0_gr34t}</code>.</p> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2020/we_can_meet_in_the_park/">We can meet in the park</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2020/WhitehatGrandPrixQuel_2019_rev1/">rev1</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2019/InfernoCTF_2019_reversing_Web_Crackme/">Web Crackme</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2019/InfernoCTF_2019_reversing_Wannabe_Rapper/">Wannabe Rapper</a> </li> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2019/InfernoCTF_2019_reversing_MrT4ntr4's_EmCo_App/">MrT4ntr4's Emco App</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Kyuwon Cho. © Kyuwon Cho. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-projects",
+          title: "projects",
+          description: "Projects I&#39;m working on or have done.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Curriculum vitae — education, publications, experience, and open-source contributions.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "nav-public-keys",
+          title: "public keys",
+          description: "GPG public key for kyuwoncho18@gmail.com",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publickeys/";
+          },
+        },{id: "post-we-can-meet-in-the-park",
+        
+          title: "We can meet in the park",
+        
+        description: "CCE 2020 Qualification Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2020/we_can_meet_in_the_park/";
+          
+        },
+      },{id: "post-rev1",
+        
+          title: "rev1",
+        
+        description: "Whitehat Grand Prix 06 Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2020/WhitehatGrandPrixQuel_2019_rev1/";
+          
+        },
+      },{id: "post-move-or-not",
+        
+          title: "Move or Not",
+        
+        description: "BambooFox CTF 2019 Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2020/BambooFoxCTF_2019_Move_or_Not/";
+          
+        },
+      },{id: "post-web-crackme",
+        
+          title: "Web Crackme",
+        
+        description: "Inferno CTF 2019 Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2019/InfernoCTF_2019_reversing_Web_Crackme/";
+          
+        },
+      },{id: "post-wannabe-rapper",
+        
+          title: "Wannabe Rapper",
+        
+        description: "Inferno CTF 2019 Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2019/InfernoCTF_2019_reversing_Wannabe_Rapper/";
+          
+        },
+      },{id: "post-mrt4ntr4-39-s-emco-app",
+        
+          title: "MrT4ntr4&#39;s Emco App",
+        
+        description: "Inferno CTF 2019 Writeup",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2019/InfernoCTF_2019_reversing_MrT4ntr4's_EmCo_App/";
+          
+        },
+      },{id: "projects-rust-security-asan-amp-amp-fuzzing",
+          title: 'Rust Security (ASan &amp;amp;amp; Fuzzing)',
+          description: "Improving sanitizer performance and fuzzing for Rust programs",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/1_rust_security/";
+            },},{id: "projects-co-op-with-microsoft",
+          title: 'Co-op with Microsoft',
+          description: "Industry–University cooperation (Apr 2017 – Dec 2017)",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/2_microsoft_coop/";
+            },},{id: "projects-windows-10-dpapi-masterkey-extraction",
+          title: 'Windows 10 DPAPI Masterkey Extraction',
+          description: "Windows kernel debugging and DPAPI masterkey recovery (Apr 2019 – Dec 2019)",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/3_dpapi_masterkey/";
+            },},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%6B%79%75%77%6F%6E%63%68%6F%31%38@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/ChoKyuWon", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/kyuwon-cho-318b37184", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=AjgaSMoAAAAJ", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>

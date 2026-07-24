@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://chokyuwon.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://chokyuwon.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-07-24T09:16:07+00:00</updated><id>https://chokyuwon.github.io/feed.xml</id><title type="html">ChoKyuWon’s Ark</title><subtitle>Personal website of Kyuwon Cho — Ph.D. student in systems security at SSLAB, Sungkyunkwan University. </subtitle><entry><title type="html">We can meet in the park</title><link href="https://chokyuwon.github.io/blog/2020/we_can_meet_in_the_park/" rel="alternate" type="text/html" title="We can meet in the park"/><published>2020-10-06T00:00:00+00:00</published><updated>2020-10-06T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2020/we_can_meet_in_the_park</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2020/we_can_meet_in_the_park/"><![CDATA[<p>Use meet-in-the-middle attack.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+<span class="kn">import</span> <span class="n">hashlib</span>
+
+<span class="n">ENCRYPTED</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">'</span><span class="se">\xA5\xD1\xDB\x88\xFD\x34\xC6\x46\x0C\xF0\xC9\x55\x0F\xDB\x61\x9E\xB9\x17\xD7\x0B\xC8\x3D\xE5\x1B\x09\x71\xAE\x5F\x1C\xB5\xC7\x2C\xC5\x3F\x5A\xA7\xFB\xED\x63\xE6\xAD\x04\x0D\x16\xF6\x33\x16\x01</span><span class="sh">'</span>
+
+<span class="n">memo1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">memo2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">Check</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ml</span><span class="p">,</span> <span class="n">cl</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ml</span> <span class="o">!=</span> <span class="n">cl</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
+            <span class="n">buf</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span>
+            <span class="nc">Check</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ml</span><span class="p">,</span> <span class="n">cl</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
+        <span class="n">buf</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span>
+        <span class="n">tmpBuf</span> <span class="o">=</span> <span class="nf">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">aes1</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">tmpBuf</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]).</span><span class="nf">digest</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+        <span class="n">aes2</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="n">tmpBuf</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]).</span><span class="nf">digest</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+
+        <span class="n">memo1</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">aes1</span><span class="p">.</span><span class="nf">encrypt</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">___FLAGHEADER___</span><span class="sh">"</span><span class="p">))</span>
+        <span class="n">memo2</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">aes2</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ENCRYPTED</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]))</span>
+
+<span class="k">def</span> <span class="nf">key2buf</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="n">n0</span> <span class="o">=</span> <span class="n">key</span> <span class="o">%</span> <span class="mi">100</span>
+    <span class="n">n1</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">key</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="o">%</span> <span class="mi">100</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">key</span><span class="o">/</span><span class="p">(</span><span class="mi">100</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">%</span> <span class="mi">100</span>
+    <span class="n">n3</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">key</span><span class="o">/</span><span class="p">(</span><span class="mi">100</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span> <span class="o">%</span> <span class="mi">100</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="n">n3</span><span class="p">,</span><span class="n">n2</span><span class="p">,</span><span class="n">n1</span><span class="p">,</span><span class="n">n0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nf">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nc">Check</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">mitm</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">set</span><span class="p">(</span><span class="n">memo1</span><span class="p">)</span><span class="o">&amp;</span><span class="nf">set</span><span class="p">(</span><span class="n">memo2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">key1</span> <span class="o">=</span> <span class="n">memo1</span><span class="p">.</span><span class="nf">index</span><span class="p">(</span><span class="n">mitm</span><span class="p">)</span>
+    <span class="n">key2</span> <span class="o">=</span> <span class="n">memo2</span><span class="p">.</span><span class="nf">index</span><span class="p">(</span><span class="n">mitm</span><span class="p">)</span>
+
+    <span class="n">aes1</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">key2buf</span><span class="p">(</span><span class="n">key1</span><span class="p">)).</span><span class="nf">digest</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+    <span class="n">aes2</span> <span class="o">=</span> <span class="n">AES</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">hashlib</span><span class="p">.</span><span class="nf">sha256</span><span class="p">(</span><span class="nf">key2buf</span><span class="p">(</span><span class="n">key2</span><span class="p">)).</span><span class="nf">digest</span><span class="p">(),</span> <span class="n">AES</span><span class="p">.</span><span class="n">MODE_ECB</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">aes1</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">aes2</span><span class="p">.</span><span class="nf">decrypt</span><span class="p">(</span><span class="n">ENCRYPTED</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[CCE 2020 Qualification Writeup]]></summary></entry><entry><title type="html">rev1</title><link href="https://chokyuwon.github.io/blog/2020/WhitehatGrandPrixQuel_2019_rev1/" rel="alternate" type="text/html" title="rev1"/><published>2020-01-06T00:00:00+00:00</published><updated>2020-01-06T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2020/WhitehatGrandPrixQuel_2019_rev1</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2020/WhitehatGrandPrixQuel_2019_rev1/"><![CDATA[<h1 id="rev1">rev1</h1> <p>Open the binary using IDA. It is 32bit executable.</p> <pre><code class="language-C++">int __cdecl main(int argc, const char **argv, const char **envp){
+  v30 = fopen("data", "rb");
+  v29 = operator new[](0x3Cu);
+  for ( i = 0; i &lt;= 14; ++i )
+    *(_DWORD *)(4 * i + v29) = operator new[](0x1000u);
+  for ( j = 0; j &lt;= 14; ++j )
+    v39 = fread(*(void **)(4 * j + v29), 1u, 0x1000u, v30);
+  fclose(v30);
+  for ( k = 0; k &lt;= 6; ++k )
+  {
+    if ( !((**(_BYTE **)(8 * k + v29) + **(_BYTE **)(8 * k + 4 + v29)) &amp; 1) )
+      std::swap&lt;unsigned char *&gt;(8 * k + v29, v29 + 8 * k + 4);
+  }
+  if ( *(_BYTE *)(*(_DWORD *)v29 + 10) != 7 || *(_BYTE *)(*(_DWORD *)(v29 + 52) + 10) != 12 )
+    return 1;
+  for ( l = 1; l &lt;= 6; ++l )
+  {
+    v28 = *(_BYTE *)(*(_DWORD *)(4 * l + v29) + 10) - 52;
+    if ( v28 &gt; 9u )
+      return 1;
+  }
+  for ( m = 7; m &lt;= 11; ++m )
+  {
+    v28 = *(_BYTE *)(*(_DWORD *)(4 * m + v29) + 10) - 77;
+    if ( v28 &gt; 9u )
+      return 1;
+  }
+  if ( *(unsigned __int8 *)(*(_DWORD *)(v29 + 48) + 10) - 34 &gt; 9 )
+    return 1;
+  v4 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 4) + 10), 3.0);
+  v5 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 8) + 10), 3.0) + v4;
+  v28 = (signed int)(pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 12) + 10), 3.0) + v5);
+  if ( v28 != 98 )
+    return 1;
+  v6 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 16) + 10), 3.0);
+  v7 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 20) + 10), 3.0) + v6;
+  v8 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 24) + 10), 3.0) + v7;
+  v28 = (signed int)(pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 28) + 10), 3.0) + v8);
+  if ( v28 != 107 )
+    return 1;
+  v9 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 36) + 10), 3.0);
+  v10 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 40) + 10), 3.0) + v9;
+  v11 = pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 44) + 10), 3.0) + v10;
+  v28 = (signed int)(pow((long double)*(unsigned __int8 *)(*(_DWORD *)(v29 + 48) + 10), 3.0) + v11);
+  if ( v28 != -65 )
+    return 1;
+  v27 = (unsigned __int8 *)operator new[](0xF000u);
+  for ( n = 0; (signed int)(v39 + 57344) &gt; n; ++n )
+    v27[n] = *(_BYTE *)(*(_DWORD *)(4 * (n / 4096) + v29) + n % 4096);
+  LODWORD(v12) = SHF(v27, v39 + 57344);
+  flag(v12);
+  v13 = 0;
+  v14 = 27;
+  v15 = -70;
+  v16 = 48;
+  v17 = 80;
+  v18 = -79;
+  v19 = 126;
+  v20 = -44;
+  v21 = 15;
+  v22 = 68;
+  v23 = 49;
+  v24 = 119;
+  v25 = -42;
+  v26 = -75;
+  for ( ii = 0; ii &lt;= 13; ++ii )
+    *(_BYTE *)(*(_DWORD *)(4 * ii + v29) + 10) = *(&amp;v13 + ii);
+  v30 = fopen("output.png", "wb");
+  for ( jj = 0; jj &lt;= 13; ++jj )
+    fwrite(*(const void **)(4 * jj + v29), 1u, 0x1000u, v30);
+  fwrite(*(const void **)(v29 + 56), 1u, v39, v30);
+  fclose(v30);
+  std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;((std::ostream::sentry *)&amp;std::cout, "\n");
+  system("pause");
+  return 0;
+}
+</code></pre> <p>This is _main function’s whole code. Let’s break it down.</p> <pre><code class="language-C++">v30 = fopen("data", "rb");
+v29 = operator new[](0x3Cu);
+for ( i = 0; i &lt;= 14; ++i )
+  *(_DWORD *)(4 * i + v29) = operator new[](0x1000u);
+for ( j = 0; j &lt;= 14; ++j )
+  v39 = fread(*(void **)(4 * j + v29), 1u, 0x1000u, v30);
+fclose(v30);
+</code></pre> <p>Hmm… Type is unclear buy roughly guess that allocate <code class="language-plaintext highlighter-rouge">v29</code>, array of <code class="language-plaintext highlighter-rouge">int[15][0x1000]</code> and put some chunck of data that read on <code class="language-plaintext highlighter-rouge">data</code> file. Let’s call it <code class="language-plaintext highlighter-rouge">rawarray</code>.</p> <pre><code class="language-C++">for ( k = 0; k &lt;= 6; ++k )
+{
+  if ( !((**(_BYTE **)(8 * k + v29) + **(_BYTE **)(8 * k + 4 + v29)) &amp; 1) )
+    std::swap&lt;unsigned char *&gt;(8 * k + v29, v29 + 8 * k + 4);
+}
+</code></pre> <p>If <code class="language-plaintext highlighter-rouge">rawdata[2k][0] + rawdata[2k+1][0]</code> is even, swap each. If that is odd, nothing happen. It is easy to understand, but hard to implement decoder.</p> <pre><code class="language-C++">if ( rawdata[0][10]) != 7 || rawdata[13][10] != 12 )
+  return 1;
+for ( l = 1; l &lt;= 6; ++l )
+{
+  v28 = rawdata[l][10] - 52;
+  if ( v28 &gt; 9u )
+    return 1;
+}
+for ( m = 7; m &lt;= 11; ++m )
+{
+  v28 = rawdata[m][10] - 77;
+  if ( v28 &gt; 9u )
+    return 1;
+}
+if ( rawdata[12][10] - 34 &gt; 9 )
+  return 1;
+</code></pre> <p>There are many condition checks. They refernece <code class="language-plaintext highlighter-rouge">rawdata[n][10]</code>, and if it dosen’t satisfiy condition, exit program. Pay attention to the sign, put the numbers on rawdata.</p> <pre><code class="language-C++">if((pow(rawdata[1][10], 3.0) + pow(rawdata[2][10], 3.0) + pow(rawdata[3][10], 3.0)) != 98)
+    return 1;
+if((pow(rawdata[4][10], 3.0) + pow(rawdata[5][10], 3.0) + pow(rawdata[6][10], 3.0) + pow(rawdata[7][10], 3.0)) != 98)
+    return 1;
+if((pow(rawdata[9][10], 3.0) + pow(rawdata[10][10], 3.0) + pow(rawdata[11][10], 3.0) + pow(rawdata[12][10], 3.0)) != 98)
+    return 1;
+</code></pre> <p>This add <code class="language-plaintext highlighter-rouge">rawdata[n][10]^3</code>, and use last byte to compare. Also pay attention on byte, just calculate this. It’s hard to calcuate by hand, I use python script.</p> <pre><code class="language-C++">v27 = (unsigned __int8 *)operator new[](0xF000u);
+for ( n = 0; (signed int)(v39 + 57344) &gt; n; ++n )
+  v27[n] = *(_BYTE *)(*(_DWORD *)(4 * (n / 4096) + v29) + n % 4096);
+LODWORD(v12) = SHF(v27, v39 + 57344);
+flag(v12);
+</code></pre> <p>Now condition is end! This code allocate some array and combine <code class="language-plaintext highlighter-rouge">rawarray[n]</code> to one, and put it on <code class="language-plaintext highlighter-rouge">SFH()</code> and put SFH’s return value on <code class="language-plaintext highlighter-rouge">flag()</code>. Hmm… SFH… It must mean <code class="language-plaintext highlighter-rouge">Secure Hash Function</code>, isn’t it? Let’s analyse SFH.</p> <pre><code class="language-C++">signed __int64 __cdecl SHF(unsigned __int8 *a1, int a2)
+{
+  v4 = 3134132LL;
+  for ( i = 0; i &lt; a2; ++i )
+  {
+    LODWORD(v4) = a1[i] ^ (unsigned int)v4;
+    v4 *= 6745203LL;
+  }
+  return v4;
+}
+</code></pre> <p>It’s simple! There is no effort for understanding.</p> <pre><code class="language-assembly">lea     eax, [ebp+var_30]
+mov     [ebp+var_C], eax
+mov     eax, [ebp+var_C]
+movzx   eax, byte ptr [eax]
+sub     eax, 7Dh
+mov     [ebp+var_22], al
+mov     eax, [ebp+var_C]
+add     eax, 1
+movzx   eax, byte ptr [eax]
+add     eax, 7Ch
+mov     [ebp+var_21], al
+mov     eax, [ebp+var_C]
+movzx   eax, byte ptr [eax+2]
+mov     byte ptr [ebp+var_20], al
+mov     eax, [ebp+var_C]
+add     eax, 3
+movzx   eax, byte ptr [eax]
+sub     eax, 51h
+mov     byte ptr [ebp+var_20+1], al
+mov     [ebp+var_1E], 0
+</code></pre> <p>In flag function, I had a very hard time because IDA could not decompile it properly, but I don’t know it and analyze only IDA decompilation. In assembly, get low 4byte of hashvalue and add some value on lowbyte, then <code class="language-plaintext highlighter-rouge">strcmp</code> with <code class="language-plaintext highlighter-rouge">'Flag'</code>.</p> <pre><code class="language-C++">v13 = 0;
+v14 = 27;
+v15 = -70;
+v16 = 48;
+v17 = 80;
+v18 = -79;
+v19 = 126;
+v20 = -44;
+v21 = 15;
+v22 = 68;
+v23 = 49;
+v24 = 119;
+v25 = -42;
+v26 = -75;
+for ( ii = 0; ii &lt;= 13; ++ii )
+  *(_BYTE *)(*(_DWORD *)(4 * ii + v29) + 10) = *(&amp;v13 + ii);
+v30 = fopen("output.png", "wb");
+for ( jj = 0; jj &lt;= 13; ++jj )
+  fwrite(*(const void **)(4 * jj + v29), 1u, 0x1000u, v30);
+fwrite(*(const void **)(v29 + 56), 1u, v39, v30);
+fclose(v30);
+std::operator&lt;&lt;&lt;std::char_traits&lt;char&gt;&gt;((std::ostream::sentry *)&amp;std::cout, "\n");
+system("pause");
+return 0;
+</code></pre> <p>And rest part of _main. C++ is hard to understand, but via dynamic analyse, this code overwrite <code class="language-plaintext highlighter-rouge">rawarray[n][10]</code> and save the <code class="language-plaintext highlighter-rouge">rawarray</code> on <code class="language-plaintext highlighter-rouge">output.png</code>. <code class="language-plaintext highlighter-rouge">output.png</code> is provided so we just brute force some probability on <code class="language-plaintext highlighter-rouge">rawarray[n][10]</code>. So I made python script to brute-force, and get flag finally! Flag: <code class="language-plaintext highlighter-rouge">WhiteHat{SHA1(8333769562446613979)}</code> And you can see my python script on <a href="https://github.com/ChoKyuWon/writeups/blob/master/WhitehatGrandprix06/Reversing1/test.py">here.</a></p>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[Whitehat Grand Prix 06 Writeup]]></summary></entry><entry><title type="html">Move or Not</title><link href="https://chokyuwon.github.io/blog/2020/BambooFoxCTF_2019_Move_or_Not/" rel="alternate" type="text/html" title="Move or Not"/><published>2020-01-02T00:00:00+00:00</published><updated>2020-01-02T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2020/BambooFoxCTF_2019_Move_or_Not</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2020/BambooFoxCTF_2019_Move_or_Not/"><![CDATA[<h1 id="move-or-not">Move or Not</h1> <p>use IDA to decompile it.</p> <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">__int64</span> <span class="kr">__fastcall</span> <span class="nf">main</span><span class="p">(</span><span class="n">__int64</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a2</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">a3</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">v4</span><span class="p">;</span> <span class="c1">// [rsp+8h] [rbp-38h]</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// [rsp+Ch] [rbp-34h]</span>
+  <span class="kt">char</span> <span class="n">s2</span><span class="p">;</span> <span class="c1">// [rsp+10h] [rbp-30h]</span>
+  <span class="kt">unsigned</span> <span class="n">__int64</span> <span class="n">v7</span><span class="p">;</span> <span class="c1">// [rsp+38h] [rbp-8h]</span>
+
+  <span class="n">v7</span> <span class="o">=</span> <span class="n">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
+  <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"First give me your password: "</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v4</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="n">v4</span> <span class="o">!=</span> <span class="mi">98416</span> <span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You don't know static analysis !"</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Second give me your key: "</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v4</span><span class="p">);</span>
+  <span class="n">v4</span> <span class="o">-=</span> <span class="mi">49</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">11</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span> <span class="p">)</span>
+    <span class="o">*</span><span class="p">((</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)</span><span class="n">unknown_function</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">+=</span> <span class="n">v4</span><span class="p">;</span>
+  <span class="n">unknown_function</span><span class="p">(</span><span class="n">s1</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Then Verify your flag: "</span><span class="p">);</span>
+  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You are right. Congratulations !!"</span><span class="p">);</span>
+  <span class="k">else</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s">"You don't know dynamic analysis !"</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0LL</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div> <p>So easily find first key is hardcoded value, <code class="language-plaintext highlighter-rouge">98416</code>. But Second key is seem more complex. It input some value on v4, and add it to <code class="language-plaintext highlighter-rouge">unknown_function</code>’s first 11byte. Second key must 1byte, 0x00 to 0xFF, but don’t know exact value. Via some test, I know the second key is ‘2’, 50. If I can set breakpoint on strcmp, I can see what is s1 directly, but I can’t.(It may because of ASLR, but don’t know exact reason). So I reverse it only static analyse.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>objdump -s -j .data ./pro
+</code></pre></div></div> <p>To see data section in binary, I use this command and see <code class="language-plaintext highlighter-rouge">unknown_function</code> is folloing value:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7f2e264782c6007f061f4782c701802f0b4883c70180070d4883c7018007414883c701802f0d4883c7018007204883c70180073c4883c7018007484883c70180076f4883c70180073b4883c7018007594883c7018007464883c701802f144883c7018007084883c7018007014883c7018007314883c7018007184883c701802f094883c7018007114883c701802f054883c701802f454883c70180071a4883c70180072d4883c701802f0b4883c7018007554883c7018007184883c7018007194883c701802f3b4883c701802f094883c7018007084883c701800758c3
+</code></pre></div></div> <p>and to make analyse easier, I want to make original asm, and make following code.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">pro.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">asm1</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">readline</span><span class="p">()</span> <span class="c1"># first 11 byte of unknown_function
+</span>    <span class="n">asm2</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">readline</span><span class="p">()</span> <span class="c1"># and rest parts of unknown_function
+</span>
+<span class="n">asm1arry</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">asm1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">asm1arry</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">asm1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">newasma</span> <span class="o">=</span> <span class="sh">""</span>
+<span class="k">for</span> <span class="n">asm</span> <span class="ow">in</span> <span class="n">asmarry</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nf">format</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">asm</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">'</span><span class="s">x</span><span class="sh">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="sh">'</span><span class="s">0</span><span class="sh">'</span> <span class="o">+</span> <span class="n">n</span>
+    <span class="n">newasmarray</span> <span class="o">+=</span> <span class="n">n</span>
+<span class="n">newasm</span> <span class="o">+=</span> <span class="n">asm2</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">newasm</span><span class="p">)</span>
+</code></pre></div></div> <p>And I use <a href="https://defuse.ca/online-x86-assembler.htm">online assembler</a>. (After CTF, I realize modify binary and open it via IDA is perfect way, but during CTF, I use online assembler and analyze assembler.) Via assembly, I see <code class="language-plaintext highlighter-rouge">unknown_function</code> is used to encrypt flag by add or subtract some value on each flag byte. So I collect encrypted flag(s1) and key. Make python script to collect key is very graceful way, but key length is only 32byte so I just make key by my hand.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s1</span> <span class="o">=</span> <span class="sh">'</span><span class="s">69417855 2e7c2633 300c2920 2848656832473a62 64795246 3b0a4f59 6e3d6c25</span><span class="sh">'</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span>
+<span class="n">enc_flag</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">enc_flag</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mh">0x27</span><span class="p">,</span><span class="mh">0x20</span><span class="p">,</span><span class="o">-</span><span class="mh">0xb</span><span class="p">,</span><span class="mh">0xd</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span><span class="o">-</span><span class="mh">0xd</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">,</span> <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x6f</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x59</span><span class="p">,</span> <span class="mh">0x46</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x9</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x5</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x1a</span><span class="p">,</span> <span class="mh">0x2d</span><span class="p">,</span> <span class="o">-</span><span class="mh">0xb</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span><span class="mh">0x19</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x3b</span><span class="p">,</span> <span class="o">-</span><span class="mh">0x9</span><span class="p">,</span> <span class="mh">0x8</span><span class="p">,</span> <span class="mh">0x58</span><span class="p">]</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="sh">""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+    <span class="n">flag</span> <span class="o">+=</span> <span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">enc_flag</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</code></pre></div></div> <p>So this is decrypt function, and flag is: <code class="language-plaintext highlighter-rouge">BambooFox{dyn4mic_1s_4ls0_gr34t}</code>.</p>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[BambooFox CTF 2019 Writeup]]></summary></entry><entry><title type="html">MrT4ntr4’s Emco App</title><link href="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_MrT4ntr4's_EmCo_App/" rel="alternate" type="text/html" title="MrT4ntr4’s Emco App"/><published>2019-12-31T00:00:00+00:00</published><updated>2019-12-31T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_MrT4ntr4&apos;s_EmCo_App</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_MrT4ntr4&apos;s_EmCo_App/"><![CDATA[<p>When I excute the file and attack debugger to it, I can find it was written by python.<br/> So I use <code class="language-plaintext highlighter-rouge">python-exe-unpacker</code>. There are so many package, but main logic is in <code class="language-plaintext highlighter-rouge">emco</code> file.<br/> <code class="language-plaintext highlighter-rouge">emco</code> has no signatue and extended, but I can simply read it by add signature on file header and add extend <code class="language-plaintext highlighter-rouge">.pyc</code> and decompile it. Find another <code class="language-plaintext highlighter-rouge">.pyc</code> file, and compare it to <code class="language-plaintext highlighter-rouge">emco</code> file, and signature is <code class="language-plaintext highlighter-rouge">03 F3 0D 0A 00 00 00 00</code>.(It may different on other project)<br/> <img src="https://raw.githubusercontent.com/ChoKyuWon/writeups/master/infernoCTF_2019/rev/MrT4ntr4's_EmCo_App/pyc.PNG" alt="original"/> <img src="https://raw.githubusercontent.com/ChoKyuWon/writeups/master/infernoCTF_2019/rev/MrT4ntr4's_EmCo_App/nonpyc.PNG" alt="emco"/><br/> Make 2nd file like 1st file.<br/> Add this signature on <code class="language-plaintext highlighter-rouge">emco</code> and rename it <code class="language-plaintext highlighter-rouge">emco.pyc</code>, and use <code class="language-plaintext highlighter-rouge">uncompyle6</code> to decompile the pyc file.<br/> Main logic is like this:</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">).</span><span class="nf">convert</span><span class="p">(</span><span class="sh">'</span><span class="s">RGB</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">size</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">im</span><span class="p">.</span><span class="nf">getdata</span><span class="p">())</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">pixels</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">width</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">width</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="p">]</span>
+    <span class="n">binary_pixels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">pixels</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pixel</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pixel</span> <span class="o">==</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">):</span>
+                <span class="n">binary_pixels</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">binary_pixels</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="sh">'</span><span class="s">1</span><span class="sh">'</span><span class="p">)</span>
+    
+    <span class="n">line</span> <span class="o">=</span> <span class="sh">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">binary_pixels</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="p">[</span> <span class="nf">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">line</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span> <span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="sh">''</span>
+    <span class="n">enc_len</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">enc</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">enc_len</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">enc_len</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="nf">chr</span><span class="p">(</span><span class="mi">125</span><span class="p">)</span> <span class="o">+</span> <span class="nf">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nf">chr</span><span class="p">(</span><span class="n">enc</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nf">frombytes</span><span class="p">(</span><span class="sh">'</span><span class="s">RGB</span><span class="sh">'</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">data</span><span class="p">.</span><span class="nf">encode</span><span class="p">())</span>
+    <span class="n">im2</span><span class="p">.</span><span class="nf">save</span><span class="p">(</span><span class="sh">'</span><span class="s">encrypted.png</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PNG</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div> <p>I do some test and get sure that logic is only use for app and other package is just trick.(like all crypto, ssl, ftp and other.)<br/> So I write decrypt function in python.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">).</span><span class="nf">convert</span><span class="p">(</span><span class="sh">'</span><span class="s">RGB</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">im</span><span class="p">.</span><span class="nf">getdata</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+        <span class="n">pixels</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="mi">125</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pixel</span> <span class="ow">in</span> <span class="n">pixels</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="sh">''</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="sh">"</span><span class="s">{0:b}</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="o">*</span><span class="p">(</span><span class="mi">8</span><span class="o">-</span><span class="nf">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">+</span> <span class="n">t</span>
+        <span class="n">line</span> <span class="o">+=</span> <span class="n">t</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">original</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">original</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">''</span>
+    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">original</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="nf">bytes</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">+</span> <span class="nf">bytes</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="o">+</span> <span class="nf">bytes</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="mi">40000</span><span class="p">)</span>
+    <span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nf">frombytes</span><span class="p">(</span><span class="sh">'</span><span class="s">RGB</span><span class="sh">'</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">im2</span><span class="p">.</span><span class="nf">getdata</span><span class="p">())</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
+    <span class="n">im2</span><span class="p">.</span><span class="nf">save</span><span class="p">(</span><span class="sh">"</span><span class="s">target.png</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">PNG</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div> <p>And run the code, I get QR code. Flag is <code class="language-plaintext highlighter-rouge">infernoCTF{w04h_3ncrypt3d_qr_d4yumnnn}</code></p>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[Inferno CTF 2019 Writeup]]></summary></entry><entry><title type="html">Wannabe Rapper</title><link href="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Wannabe_Rapper/" rel="alternate" type="text/html" title="Wannabe Rapper"/><published>2019-12-31T00:00:00+00:00</published><updated>2019-12-31T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Wannabe_Rapper</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Wannabe_Rapper/"><![CDATA[<p>In zip file, it contain 3 file with smali extend. It can easily convert to java bytecode.<br/> In <code class="language-plaintext highlighter-rouge">MainActivity$1.smali</code>, I can find main logic of username and password.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.line 70
+const-string v1, "m&amp;m"
+
+invoke-virtual {p1, v1}, Ljava/lang/String;-&gt;equals(Ljava/lang/Object;)Z
+
+move-result p1
+</code></pre></div></div> <p>we can find username on this code.</p> <p>Analyze bytecode, password is like this:</p> <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">array</span> <span class="o">=</span> <span class="o">[</span><span class="s">"84"</span><span class="o">,</span> <span class="s">"5"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"f8eb53473"</span><span class="o">,</span> <span class="s">"4"</span><span class="o">,</span> <span class="s">"2efb3d"</span><span class="o">,</span> <span class="s">"f"</span><span class="o">,</span> <span class="s">"82df"</span><span class="o">]</span>
+<span class="n">secret</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="n">array</span><span class="o">).</span><span class="na">replaceAll</span><span class="o">(</span><span class="sc">'8'</span><span class="o">,</span> <span class="sc">'0'</span><span class="o">);</span>
+<span class="k">if</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">secret</span><span class="o">,</span> <span class="n">md5</span><span class="o">(</span><span class="n">inputpassword</span><span class="o">))</span> <span class="o">==</span> <span class="kc">true</span><span class="o">){</span>
+    <span class="n">pass</span><span class="o">()</span>
+<span class="o">}</span>
+</code></pre></div></div> <p>so secret hash is <code class="language-plaintext highlighter-rouge">04a5a2af0eb53473a4a2efb3dafa02df</code>. I tried to decrypt it on [https://www.md5online.org/md5-decrypt.html] and [https://md5.gromweb.com/], but they also can’t decrypt it during CTF on held. While I use <code class="language-plaintext highlighter-rouge">hashcat</code>, CTF is over.<br/> After CTF, I use md5online.org again, and then I get a result. but md5.gromweb.com isn’t work yet.<br/> Anyway, flag is :<code class="language-plaintext highlighter-rouge">infernoCTF{m&amp;m:mockingbird78209}</code></p>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[Inferno CTF 2019 Writeup]]></summary></entry><entry><title type="html">Web Crackme</title><link href="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Web_Crackme/" rel="alternate" type="text/html" title="Web Crackme"/><published>2019-12-31T00:00:00+00:00</published><updated>2019-12-31T00:00:00+00:00</updated><id>https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Web_Crackme</id><content type="html" xml:base="https://chokyuwon.github.io/blog/2019/InfernoCTF_2019_reversing_Web_Crackme/"><![CDATA[<p>In chrome developer tool, I can see it use WASM(WebAssembly.)<br/> The page’s script is like this:</p> <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">wabtCompiler</span> <span class="o">=</span> <span class="nc">WabtModule</span><span class="p">();</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nf">loadText</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="na">cache</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-cache</span><span class="dl">"</span><span class="p">});</span>
+    <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+    <span class="nl">methods</span><span class="p">:</span> <span class="p">{</span>
+        <span class="k">async</span> <span class="nf">selectExample</span><span class="p">(</span><span class="nx">example</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">wat</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">all</span><span class="p">(</span><span class="nf">loadText</span><span class="p">(</span><span class="nx">example</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">/assembly.wat</span><span class="dl">'</span><span class="p">));</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">wat</span> <span class="o">=</span> <span class="nx">wat</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="k">async</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+			<span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">key</span><span class="dl">'</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+			<span class="kd">var</span> <span class="nx">stringFromKey</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+			<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">key</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  				<span class="nx">stringFromKey</span><span class="o">+=</span><span class="nx">key</span><span class="p">.</span><span class="nf">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+			<span class="p">}</span>
+            <span class="kd">const</span> <span class="nx">parsedWat</span> <span class="o">=</span> <span class="nx">wabtCompiler</span><span class="p">.</span><span class="nf">parseWat</span><span class="p">(</span><span class="dl">""</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">wat</span><span class="p">);</span>
+            <span class="kd">const</span> <span class="nx">buffer</span> <span class="o">=</span> <span class="nx">parsedWat</span><span class="p">.</span><span class="nf">toBinary</span><span class="p">({}).</span><span class="nx">buffer</span><span class="p">;</span>
+            <span class="kd">const</span> <span class="nx">wasmModule</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
+            <span class="nf">eval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">js</span><span class="p">);</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div> <p>(it is just simplified version)<br/> It look get js and WASM in other url, so I capture the traffic by Fiddler4.<br/> I can see two request on <code class="language-plaintext highlighter-rouge">/challenge/script.js</code> and <code class="language-plaintext highlighter-rouge">/challenge/assembly.wat</code>.<br/> In browser console, type this code:</p> <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nf">loadText</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="na">cache</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-cache</span><span class="dl">"</span><span class="p">});</span>
+    <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">wat</span><span class="p">,</span> <span class="nx">js</span><span class="p">]</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">all</span><span class="p">([</span>
+                <span class="nf">loadText</span><span class="p">(</span><span class="dl">'</span><span class="s1">/challenge/assembly.wat</span><span class="dl">'</span><span class="p">),</span>
+                <span class="nf">loadText</span><span class="p">(</span><span class="dl">'</span><span class="s1">/challenge/script.js</span><span class="dl">'</span><span class="p">),</span>
+<span class="p">]);</span>
+</code></pre></div></div> <p>and you can read wat and js.<br/> wasm code is like this:</p> <pre><code class="language-wasm">(module
+  (memory 1)
+  (func $myFunction1 (result i32)
+    (i32.store
+      (i32.const 0)
+      (i32.const 0xd359beef) 
+    )
+    (i32.store
+      (i32.const 3)
+      (i32.const 0x5579) 
+    )
+	(i32.store
+	  (i32.const 5)
+	  (i32.const 0x66) 
+	)
+    (i32.load
+      (i32.const 2)
+    )
+  )
+
+  (func $myFunction2 (result i32)
+    (i32.store
+      (i32.const 0)
+      (i32.const 0xc939ba2d) 
+    )
+    (i32.store
+      (i32.const 3)
+      (i32.const 0x7165) 
+    )
+	(i32.store16
+	  (i32.const 4)
+	  (i32.const 0x2D4D) 
+	)
+    (i32.load
+      (i32.const 2)
+    )
+  )
+  (export "myFunction1" (func $myFunction1))
+  (export "myFunction2" (func $myFunction2))
+)
+</code></pre> <p>Some value is hardcoded on wasm, and script.js compare the value and input.<br/> Analyze the wasm code is one way to know the value, but I use browser console.</p> <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">wabtCompiler</span> <span class="o">=</span> <span class="nc">WabtModule</span><span class="p">();</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nf">loadText</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="na">cache</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-cache</span><span class="dl">"</span><span class="p">});</span>
+    <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nf">text</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">wat</span><span class="p">,</span> <span class="nx">js</span><span class="p">]</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">all</span><span class="p">([</span>
+                <span class="nf">loadText</span><span class="p">(</span><span class="dl">'</span><span class="s1">/challenge/assembly.wat</span><span class="dl">'</span><span class="p">),</span>
+                <span class="nf">loadText</span><span class="p">(</span><span class="dl">'</span><span class="s1">/challenge/script.js</span><span class="dl">'</span><span class="p">),</span>
+<span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">parsedWat</span> <span class="o">=</span> <span class="nx">wabtCompiler</span><span class="p">.</span><span class="nf">parseWat</span><span class="p">(</span><span class="dl">""</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">wat</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">buffer</span> <span class="o">=</span> <span class="nx">parsedWat</span><span class="p">.</span><span class="nf">toBinary</span><span class="p">({}).</span><span class="nx">buffer</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">wasmModule</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">wasmInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nc">Instance</span><span class="p">(</span><span class="nx">wasmModule</span><span class="p">,</span> <span class="p">{});</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">myFunction1</span><span class="p">,</span><span class="nx">myFunction2</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">wasmInstance</span><span class="p">.</span><span class="nx">exports</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">res1</span> <span class="o">=</span> <span class="nf">myFunction1</span><span class="p">().</span><span class="nf">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">res2</span> <span class="o">=</span> <span class="nf">myFunction2</span><span class="p">().</span><span class="nf">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+</code></pre></div></div> <p>Now res1 + res2 is the value, <code class="language-plaintext highlighter-rouge">665579592d4d6539</code>.<br/> To conver it to string, flag is <code class="language-plaintext highlighter-rouge">infernoCTF{fUyY-Me9}</code>.</p>]]></content><author><name></name></author><category term="writeup"/><category term="writeup"/><summary type="html"><![CDATA[Inferno CTF 2019 Writeup]]></summary></entry></feed>
