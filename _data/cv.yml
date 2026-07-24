@@ -1,0 +1,135 @@
+cv:
+  name: Kyuwon Cho
+  label: Ph.D. Student in Systems Security
+  email: kyuwoncho18@gmail.com
+  location: Suwon, South Korea
+  image: ""
+  summary: >
+    Ph.D. student at SSLAB (System Security Lab), Sungkyunkwan University, advised by Hojoon Lee.
+    Research on software testing (fuzzing, sanitizers), hardware-accelerated security (ARM PAC, MTE),
+    compilers for security, and systems security.
+
+  social_networks:
+    - network: GitHub
+      username: ChoKyuWon
+    - network: LinkedIn
+      username: kyuwon-cho-318b37184
+
+  sections:
+    Education:
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        url: https://www.skku.edu
+        area: Computer Science and Engineering (SSLAB)
+        studyType: Ph.D. Candidate
+        highlights:
+          - "Advised by Hojoon Lee. Affiliation: College of Software and Informatics."
+
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        area: Computer Science (College of Software)
+        studyType: M.S.
+        start_date: 2021
+        end_date: 2023
+        highlights:
+          - "Master's Thesis: Retrofitting the Address Sanitizer for Rust by Program Analysis."
+
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        area: Computer Science (College of Software)
+        studyType: B.S.
+        start_date: 2017
+        end_date: 2021
+        highlights:
+          - "Honors: Student's Success Scholarship, Scholarship for Academic Excellence, Scholarship for Start-up Supporting."
+
+    Publications:
+      - title: "eMPAC: Unlocking Full Potential of Pointer Authentication in Microcontrollers with Fat Pointers"
+        authors:
+          - Sungsoo Kim
+          - Jihoon Kim
+          - Kyuwon Cho
+          - Hojoon Lee
+        publisher: "ESORICS 2026 (to appear)"
+        releaseDate: 2026
+
+      - title: "RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust"
+        authors:
+          - Kyuwon Cho
+          - Jongyoon Kim
+          - Kha Dinh Duy
+          - Hajeong Lim
+          - Hojoon Lee
+        publisher: "USENIX Security 2024"
+        url: https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon
+        releaseDate: 2024
+
+      - title: "Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures"
+        authors:
+          - Kha Dinh Duy
+          - Kyuwon Cho
+          - Taehyun Noh
+          - Hojoon Lee
+        publisher: "ACM CCS 2023 — Distinguished Paper Award"
+        url: https://dl.acm.org/doi/10.1145/3576915.3623079
+        releaseDate: 2023
+
+    Experience:
+      - company: SKKU BugBounty
+        position: "Incentive Award"
+        location: Suwon, South Korea
+        start_date: 2017
+        end_date: 2017
+        highlights:
+          - "Found and exploited real web vulnerabilities: cookie reuse, SQL injection, e-mail forwarding, password change."
+
+      - company: Microsoft (Industry–University Cooperation Co-op)
+        position: Research Intern
+        location: Suwon, South Korea
+        start_date: 2017
+        end_date: 2017
+        highlights:
+          - "Studied cloud platform services: Microsoft Azure, AWS, GCP."
+          - "Researched blockchain use cases on Microsoft Azure."
+
+      - company: Windows 10 DPAPI Masterkey Extraction
+        position: Researcher
+        location: Suwon, South Korea
+        start_date: 2019
+        end_date: 2019
+        highlights:
+          - "Windows 10 kernel debugging."
+          - "Data Protection API (DPAPI) masterkey extraction from a victim's files."
+
+      - company: SKKU BugBounty
+        position: "3rd Award"
+        location: Suwon, South Korea
+        start_date: 2021
+        end_date: 2021
+        highlights:
+          - "Found and exploited real web vulnerabilities across multiple classes."
+
+    Open Source:
+      - name: "Rust (rust-lang/rust)"
+        summary: "Compiler contributions and bug reports."
+        highlights:
+          - "Pull request: rust-lang/rust#113814"
+          - "Internal Compiler Errors (I-ICE), e.g. rust-lang/rust#129169"
+          - "Miscompilations (I-miscompile), e.g. rust-lang/rust#159591"
+
+      - name: "LLVM (llvm/llvm-project)"
+        summary: "Compiler contributions and bug reports."
+        highlights:
+          - "Commit: reviews.llvm.org/D142844"
+          - "Crashes and miscompilations, e.g. llvm/llvm-project#210093, #210177"
+
+    Skills:
+      - name: Programming Languages
+        keywords: "C/C++, Python, Rust, Assembly (ARM, x86-64)"
+
+      - name: Areas
+        keywords: "Fuzzing, Sanitizers, Compilers, Program Analysis, Systems Security"
+
+    Interests:
+      - name: Interests
+        keywords: "Magic: The Gathering, Board Games, Reading"

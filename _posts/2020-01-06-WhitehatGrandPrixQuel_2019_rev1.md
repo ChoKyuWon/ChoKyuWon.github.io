@@ -1,11 +1,10 @@
 ---
 layout: post
 title: rev1
-subtitle: Whitehat Grand Prix 06 Writeup
-gh-repo: ChoKyuWon/writeups
-gh-badge: [star, fork, follow]
-tags: [writeup]
-comments: true
+date: 2020-01-06
+description: Whitehat Grand Prix 06 Writeup
+tags: writeup
+categories: writeup
 ---
 
 # rev1

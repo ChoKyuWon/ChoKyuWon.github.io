@@ -1,11 +1,10 @@
 ---
 layout: post
 title: Move or Not
-subtitle: BambooFox CTF 2019 Writeup
-gh-repo: ChoKyuWon/writeups
-gh-badge: [star, fork, follow]
-tags: [writeup]
-comments: true
+date: 2020-01-02
+description: BambooFox CTF 2019 Writeup
+tags: writeup
+categories: writeup
 ---
 
 # Move or Not

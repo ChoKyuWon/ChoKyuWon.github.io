@@ -1,11 +1,10 @@
 ---
 layout: post
 title: We can meet in the park
-subtitle: CCE 2020 Qualification Writeup
-gh-repo: ChoKyuWon/writeups
-gh-badge: [star, fork, follow]
-tags: [writeup]
-comments: true
+date: 2020-10-06
+description: CCE 2020 Qualification Writeup
+tags: writeup
+categories: writeup
 ---
 
 Use meet-in-the-middle attack.

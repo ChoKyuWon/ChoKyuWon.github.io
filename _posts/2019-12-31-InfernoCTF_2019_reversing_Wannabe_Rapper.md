@@ -1,11 +1,10 @@
 ---
 layout: post
 title: Wannabe Rapper
-subtitle: Inferno CTF 2019 Writeup
-gh-repo: ChoKyuWon/writeups
-gh-badge: [star, fork, follow]
-tags: [writeup]
-comments: true
+date: 2019-12-31
+description: Inferno CTF 2019 Writeup
+tags: writeup
+categories: writeup
 ---
 
 In zip file, it contain 3 file with smali extend. It can easily convert to java bytecode.  

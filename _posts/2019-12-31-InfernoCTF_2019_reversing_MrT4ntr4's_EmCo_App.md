@@ -1,11 +1,10 @@
 ---
 layout: post
 title: MrT4ntr4's Emco App
-subtitle: Inferno CTF 2019 Writeup
-gh-repo: ChoKyuWon/writeups
-gh-badge: [star, fork, follow]
-tags: [writeup]
-comments: true
+date: 2019-12-31
+description: Inferno CTF 2019 Writeup
+tags: writeup
+categories: writeup
 ---
 
 When I excute the file and attack debugger to it, I can find it was written by python.  
