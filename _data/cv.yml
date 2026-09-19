@@ -1,0 +1,101 @@
+cv:
+  name: Kyuwon Cho
+  label: Ph.D. Student in Systems Security
+  email: kyuwoncho18@gmail.com
+  location: Suwon, South Korea
+  image: ""
+  summary: >
+    Ph.D. student at SSLAB (System Security Lab), Sungkyunkwan University, advised by Hojoon Lee.
+    Research on software testing (fuzzing, sanitizers), hardware-accelerated security (ARM PAC, MTE),
+    compilers for security, and systems security.
+
+  social_networks:
+    - network: GitHub
+      username: ChoKyuWon
+    - network: LinkedIn
+      username: kyuwon-cho-318b37184
+
+  sections:
+    Education:
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        url: https://www.skku.edu
+        area: Computer Science and Engineering (SSLAB)
+        studyType: Ph.D. Candidate
+        highlights:
+          - "Advised by Hojoon Lee. Affiliation: College of Software and Informatics."
+
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        area: Computer Science (College of Software)
+        studyType: M.S.
+        start_date: 2021
+        end_date: 2023
+        highlights:
+          - "Master's Thesis: Retrofitting the Address Sanitizer for Rust by Program Analysis."
+
+      - institution: Sungkyunkwan University
+        location: Suwon, South Korea
+        area: Computer Science (College of Software)
+        studyType: B.S.
+        start_date: 2017
+        end_date: 2021
+        highlights:
+          - "Honors: Student's Success Scholarship, Scholarship for Academic Excellence, Scholarship for Start-up Supporting."
+
+    Publications:
+      - title: "eMPAC: Unlocking Full Potential of Pointer Authentication in Microcontrollers with Fat Pointers"
+        authors:
+          - Sungsoo Kim
+          - Jihoon Kim
+          - Kyuwon Cho
+          - Hojoon Lee
+        publisher: "ESORICS 2026 (to appear)"
+        releaseDate: 2026
+
+      - title: "RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust"
+        authors:
+          - Kyuwon Cho
+          - Jongyoon Kim
+          - Kha Dinh Duy
+          - Hajeong Lim
+          - Hojoon Lee
+        publisher: "USENIX Security 2024"
+        url: https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon
+        releaseDate: 2024
+
+      - title: "Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures"
+        authors:
+          - Kha Dinh Duy
+          - Kyuwon Cho
+          - Taehyun Noh
+          - Hojoon Lee
+        publisher: "ACM CCS 2023 — Distinguished Paper Award"
+        url: https://dl.acm.org/doi/10.1145/3576915.3623079
+        releaseDate: 2023
+
+    # Experience is hidden until there is job experience to list.
+    # To show this section again, uncomment and fill in the entries below.
+    # Experience:
+    #   - company: Company Name
+    #     position: Your Role
+    #     location: City, Country
+    #     start_date: 2026
+    #     end_date: present
+    #     highlights:
+    #       - What you did here.
+
+    Open Source:
+      - bullet: "**Rust** ([rust-lang/rust](https://github.com/rust-lang/rust/commits?author=ChoKyuWon)) — merged compiler [PR #113814](https://github.com/rust-lang/rust/pull/113814); reported Internal Compiler Errors (e.g. [#129169](https://github.com/rust-lang/rust/issues/129169)) and miscompilations (e.g. [#159591](https://github.com/rust-lang/rust/issues/159591))."
+      - bullet: "**LLVM** ([llvm/llvm-project](https://github.com/llvm/llvm-project/commits?author=ChoKyuWon)) — landed [D142844](https://reviews.llvm.org/D142844); reported crashes and miscompilations (e.g. [#210093](https://github.com/llvm/llvm-project/issues/210093), [#210177](https://github.com/llvm/llvm-project/issues/210177))."
+
+    Skills:
+      - name: Programming Languages
+        keywords: "C/C++, Python, Rust, Assembly (ARM, x86-64)"
+
+      - name: Areas
+        keywords: "Fuzzing, Sanitizers, Compilers, Program Analysis, Systems Security"
+
+    Interests:
+      - name: Interests
+        keywords: "Magic: The Gathering, Board Games, Reading"

@@ -1,0 +1,99 @@
+# =============================================================================
+# Publications — single source of truth.
+# Rendered on /publications/ (grouped by year, newest first) and, when
+# `selected: true`, on the home page.
+#
+# Fields per entry:
+#   key       unique id (also the HTML anchor, e.g. /publications/#key)
+#   title     paper title
+#   authors   author list as HTML; wrap your own name in <strong>…</strong>
+#   venue     conference/journal name (shown in italics)
+#   abbr      short venue badge shown on the left (optional)
+#   year      integer; used to group & sort
+#   note      short note after the venue, e.g. "To appear" (optional)
+#   selected  true to also feature it on the home page (optional)
+#   award     award text, shown after the venue and year (optional)
+#   links     ordered map of "Button label: URL". Local files use site-absolute
+#             paths like /assets/pdf/foo.pdf. Add "Slides" for the slide deck and
+#             "Presentation" for the talk video (e.g. a YouTube link).
+#   bibtex    full BibTeX, shown under a collapsible "BibTeX" toggle (optional)
+# =============================================================================
+
+- key: kim2026runasan
+  title: "RunaSan: A Rust-Native Sanitizer for Precise and Context-Sensitive Sanitization"
+  authors: "Jongyoon Kim, <strong>Kyuwon Cho</strong>, Hojoon Lee"
+  venue: " ACM SIGOPS Annual Technical Conference (ATC)"
+  abbr: "ATC '26"
+  year: 2026
+  selected: true
+  note: "To appear"
+
+- key: kim2026dvsr
+  title: "Hardening Programs with Data Value Space Randomization of Semantically Arbitrary Values"
+  authors: "Jaeyoon Kim, Hajeong Lim, <strong>Kyuwon Cho</strong>, Hojoon Lee"
+  venue: " ACM SIGOPS Annual Technical Conference (ATC)"
+  abbr: "ATC '26"
+  year: 2026
+  selected: true
+  note: "To appear"
+
+- key: kim2026empac
+  title: "eMPAC: Unlocking Full Potential of Pointer Authentication in Microcontrollers with Fat Pointers"
+  authors: "Sungsoo Kim, Jihoon Kim, <strong>Kyuwon Cho</strong>, Hojoon Lee"
+  venue: "European Symposium on Research in Computer Security (ESORICS)"
+  abbr: "ESORICS'26"
+  year: 2026
+  links:
+    Full paper: "/assets/prepub/empac.pdf"
+
+- key: cho2024rustsan
+  title: "RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust"
+  authors: "<strong>Kyuwon Cho</strong>, Jongyoon Kim, Kha Dinh Duy, Hajeong Lim, Hojoon Lee"
+  venue: "33rd USENIX Security Symposium (USENIX Security 24)"
+  abbr: "SEC '24"
+  year: 2024
+  selected: true
+  links:
+    Full paper: "https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon"
+    Slides: "/assets/pdf/RustSan_SEC24_Slides.pdf"
+    Presentation: "https://www.youtube.com/watch?v=YldjPs9Y1eM"
+  bibtex: |
+    @inproceedings{cho2024rustsan,
+      author    = {Kyuwon Cho and Jongyoon Kim and Kha Dinh Duy and Hajeong Lim and Hojoon Lee},
+      title     = {{RustSan}: Retrofitting {AddressSanitizer} for Efficient Sanitization of Rust},
+      booktitle = {33rd USENIX Security Symposium (USENIX Security 24)},
+      year      = {2024},
+      isbn      = {978-1-939133-44-1},
+      address   = {Philadelphia, PA},
+      pages     = {3729--3746},
+      url       = {https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon},
+      publisher = {USENIX Association},
+      month     = aug,
+    }
+
+- key: duy2023capacity
+  title: "Capacity: Cryptographically-Enforced In-process Capabilities for Modern ARM Architectures"
+  authors: "Kha Dinh Duy, <strong>Kyuwon Cho</strong>, Taehyun Noh, Hojoon Lee"
+  venue: "ACM SIGSAC Conference on Computer and Communications Security (CCS)"
+  abbr: "CCS '23"
+  year: 2023
+  selected: true
+  award: "Distinguished Paper Award"
+  links:
+    Full paper: "https://dl.acm.org/doi/10.1145/3576915.3623079"
+    Award certificate: "/assets/pdf/Distinguished_Paper_Award_Capacity.pdf"
+  bibtex: |
+    @inproceedings{duy2023capacity,
+      author    = {Dinh Duy, Kha and Cho, Kyuwon and Noh, Taehyun and Lee, Hojoon},
+      title     = {Capacity: Cryptographically-Enforced In-Process Capabilities for Modern ARM Architectures},
+      booktitle = {Proceedings of the 2023 ACM SIGSAC Conference on Computer and Communications Security},
+      year      = {2023},
+      isbn      = {9798400700507},
+      publisher = {Association for Computing Machinery},
+      address   = {New York, NY, USA},
+      pages     = {874--888},
+      doi       = {10.1145/3576915.3623079},
+      url       = {https://doi.org/10.1145/3576915.3623079},
+      location  = {Copenhagen, Denmark},
+      series    = {CCS '23},
+    }
