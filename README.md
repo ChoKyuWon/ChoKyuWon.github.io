@@ -9,7 +9,8 @@ Built with [Jekyll](https://jekyllrb.com/) and the
 ## Structure
 
 - `_pages/about.md` — landing page (about + selected publications + latest posts)
-- `_bibliography/papers.bib` — publications (rendered by jekyll-scholar)
+- `_data/papers.yml` — publications; each entry also gets its own page at `/publications/<key>/`
+  with Google Scholar metadata (`_plugins/paper_pages.rb`, `_layouts/paper.liquid`)
 - `_data/cv.yml` — CV content (rendered on `/cv/`)
 - `_projects/` — project cards shown on `/projects/`
 - `_posts/` — blog posts / CTF writeups

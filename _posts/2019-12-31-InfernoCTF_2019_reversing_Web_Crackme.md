@@ -5,6 +5,7 @@ date: 2019-12-31
 description: Inferno CTF 2019 Writeup
 tags: writeup
 categories: writeup
+redirect_from: "/2019-12-31-InfernoCTF_2019_reversing_Web_Crackme/"
 ---
 
 In chrome developer tool, I can see it use WASM(WebAssembly.)  

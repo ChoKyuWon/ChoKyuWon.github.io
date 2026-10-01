@@ -5,6 +5,7 @@ date: 2020-01-02
 description: BambooFox CTF 2019 Writeup
 tags: writeup
 categories: writeup
+redirect_from: "/2020-01-02-BambooFoxCTF_2019_Move_or_Not/"
 ---
 
 # Move or Not

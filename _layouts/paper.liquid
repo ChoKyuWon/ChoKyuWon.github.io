@@ -1,0 +1,25 @@
+---
+layout: default
+---
+{%- comment -%}
+  Per-paper page, generated for each entry in _data/papers.yml by _plugins/paper_pages.rb.
+{%- endcomment -%}
+{%- assign paper = page.paper -%}
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ paper.title }}</h1>
+  </header>
+
+  <article>
+    <div class="publications">
+      <ol class="bibliography">
+        <li>{% include paper_entry.liquid paper=paper standalone=true %}</li>
+      </ol>
+    </div>
+
+    {%- if paper.abstract -%}
+      <h2>Abstract</h2>
+      <p>{{ paper.abstract }}</p>
+    {%- endif -%}
+  </article>
+</div>

@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our paper **eMPAC** was accepted to appear at **ESORICS 2026**. 🎉
+Our paper [**eMPAC**](/publications/kim2026empac/) was accepted to appear at **ESORICS 2026**. 🎉

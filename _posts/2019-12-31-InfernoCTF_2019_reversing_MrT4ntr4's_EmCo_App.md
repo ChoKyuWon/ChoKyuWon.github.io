@@ -5,6 +5,7 @@ date: 2019-12-31
 description: Inferno CTF 2019 Writeup
 tags: writeup
 categories: writeup
+redirect_from: "/2019-12-31-InfernoCTF_2019_reversing_MrT4ntr4's_EmCo_App/"
 ---
 
 When I excute the file and attack debugger to it, I can find it was written by python.  

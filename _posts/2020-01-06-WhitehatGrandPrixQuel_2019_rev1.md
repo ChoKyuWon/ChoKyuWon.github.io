@@ -5,6 +5,7 @@ date: 2020-01-06
 description: Whitehat Grand Prix 06 Writeup
 tags: writeup
 categories: writeup
+redirect_from: "/2020-01-06-WhitehatGrandPrixQuel_2019_rev1/"
 ---
 
 # rev1

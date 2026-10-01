@@ -1,6 +1,7 @@
 {%- comment -%}
   Renders a single publication card from _data/papers.yml.
   Usage: {% include paper_entry.liquid paper=paper %}
+  Pass standalone=true on the paper's own page, where the title is already the page heading.
 {%- endcomment -%}
 {%- assign paper = include.paper -%}
 <div class="row">
@@ -10,7 +11,11 @@
     {%- endif -%}
   </div>
   <div id="{{ paper.key }}" class="col col-sm-10">
-    <div class="title">{{ paper.title }}</div>
+    {%- unless include.standalone -%}
+      <div class="title">
+        <a href="{{ '/publications/' | append: paper.key | append: '/' | relative_url }}">{{ paper.title }}</a>
+      </div>
+    {%- endunless -%}
     <div class="author">{{ paper.authors }}</div>
     <div class="periodical">
       <em>{{ paper.venue }}</em>{% if paper.year %}, {{ paper.year }}{% endif %}{% if paper.award %}, {{ paper.award }}{% endif %}{% if paper.note %} <span class="periodical-note">({{ paper.note }})</span>{% endif %}

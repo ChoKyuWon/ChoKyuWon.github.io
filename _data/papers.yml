@@ -1,7 +1,8 @@
 # =============================================================================
 # Publications — single source of truth.
 # Rendered on /publications/ (grouped by year, newest first) and, when
-# `selected: true`, on the home page.
+# `selected: true`, on the home page. Each entry also gets its own page at
+# /publications/<key>/ (see _plugins/paper_pages.rb) with Google Scholar metadata.
 #
 # Fields per entry:
 #   key       unique id (also the HTML anchor, e.g. /publications/#key)
@@ -17,6 +18,7 @@
 #             paths like /assets/pdf/foo.pdf. Add "Slides" for the slide deck and
 #             "Presentation" for the talk video (e.g. a YouTube link).
 #   bibtex    full BibTeX, shown under a collapsible "BibTeX" toggle (optional)
+#   abstract  shown on the paper's page and used as its search snippet (optional)
 # =============================================================================
 
 - key: kim2026runasan
@@ -45,6 +47,15 @@
   year: 2026
   links:
     Full paper: "/assets/prepub/empac.pdf"
+  abstract: >-
+    The Pointer Authentication (PA) extension introduced in ARMv8.3-A has significantly raised the bar
+    for exploiting memory errors with hardware-accelerated pointer integrity. Unfortunately, its adaptation
+    to the M-profile ARM architecture arrived with significantly reduced feature sets. As a result, existing
+    works on PA-based system hardening do not apply to ARM-based MCU systems. In this paper, we present the
+    eMPAC architecture, which extends the M-profile PA with an ABI extension to unlock its full potential.
+    The key idea is to construct a compiler-defined extended architecture that embraces the fat pointer
+    design. We show that the eMPAC architecture enables the existing PA-based security measures developed
+    for A-profile processors to be applied to M-profile processors with moderate overhead.
 
 - key: cho2024rustsan
   title: "RustSan: Retrofitting AddressSanitizer for Efficient Sanitization of Rust"

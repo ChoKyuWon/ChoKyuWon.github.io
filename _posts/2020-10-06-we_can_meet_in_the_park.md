@@ -5,6 +5,7 @@ date: 2020-10-06
 description: CCE 2020 Qualification Writeup
 tags: writeup
 categories: writeup
+redirect_from: "/2020-10-06-we_can_meet_in_the_park/"
 ---
 
 Use meet-in-the-middle attack.

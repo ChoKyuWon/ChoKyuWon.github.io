@@ -1,6 +1,9 @@
 ---
 layout: default
 permalink: /blog/
+redirect_from:
+  - /writeuplist
+  - /tags
 title: blog
 nav: false
 nav_order: 1
