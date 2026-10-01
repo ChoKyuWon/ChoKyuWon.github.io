@@ -1,6 +1,6 @@
 ---
 layout: page
-title: public keys
+title: GPG pubkey
 permalink: /publickeys/
 description: GPG public key for kyuwoncho18@gmail.com
 nav: true
