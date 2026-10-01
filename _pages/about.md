@@ -10,7 +10,7 @@ profile:
   more_info: >
     <p>SSLAB, Sungkyunkwan University</p>
     <p>Suwon, South Korea</p>
-    <p>kyuwoncho18@gmail.com</p>
+    <p>kyuwon.cho@skku.edu</p>
 
 publications: true # includes the full publication list from _data/papers.yml
 social: true # includes social icons at the bottom of the page

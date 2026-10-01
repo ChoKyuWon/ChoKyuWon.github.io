@@ -60,6 +60,12 @@ on:
 permissions:
   contents: write
 
+# Run deploys one at a time, in push order, so an older build can never finish last
+# and overwrite a newer one on gh-pages.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     # available images: https://github.com/actions/runner-images#available-images
