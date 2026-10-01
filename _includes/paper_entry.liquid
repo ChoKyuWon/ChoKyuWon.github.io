@@ -25,11 +25,5 @@
         <a href="{{ link[1] }}" class="btn btn-sm z-depth-0" role="button" target="_blank" rel="noopener noreferrer">{{ link[0] }}</a>
       {%- endfor -%}
     </div>
-    {%- if paper.bibtex -%}
-      <details class="publication-bibtex mt-2">
-        <summary>BibTeX</summary>
-        <pre><code class="language-bibtex">{{ paper.bibtex | strip | xml_escape }}</code></pre>
-      </details>
-    {%- endif -%}
   </div>
 </div>
