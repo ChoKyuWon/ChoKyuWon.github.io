@@ -1,18 +1,17 @@
 # =============================================================================
 # Publications — single source of truth.
-# Rendered on /publications/ (grouped by year, newest first) and, when
-# `selected: true`, on the home page. Each entry also gets its own page at
-# /publications/<key>/ (see _plugins/paper_pages.rb) with Google Scholar metadata.
+# Rendered on the home page under #publications (grouped by year, newest first).
+# Each entry also gets its own page at /publications/<key>/ (see _plugins/paper_pages.rb)
+# with Google Scholar metadata.
 #
 # Fields per entry:
-#   key       unique id (also the HTML anchor, e.g. /publications/#key)
+#   key       unique id (also the HTML anchor on the home page, e.g. /#key)
 #   title     paper title
 #   authors   author list as HTML; wrap your own name in <strong>…</strong>
 #   venue     conference/journal name (shown in italics)
 #   abbr      short venue badge shown on the left (optional)
 #   year      integer; used to group & sort
 #   note      short note after the venue, e.g. "To appear" (optional)
-#   selected  true to also feature it on the home page (optional)
 #   award     award text, shown after the venue and year (optional)
 #   links     ordered map of "Button label: URL". Local files use site-absolute
 #             paths like /assets/pdf/foo.pdf. Add "Slides" for the slide deck and
@@ -27,7 +26,6 @@
   venue: " ACM SIGOPS Annual Technical Conference (ATC)"
   abbr: "ATC '26"
   year: 2026
-  selected: true
   note: "To appear"
 
 - key: kim2026dvsr
@@ -36,7 +34,6 @@
   venue: " ACM SIGOPS Annual Technical Conference (ATC)"
   abbr: "ATC '26"
   year: 2026
-  selected: true
   note: "To appear"
 
 - key: kim2026empac
@@ -63,7 +60,6 @@
   venue: "33rd USENIX Security Symposium (USENIX Security 24)"
   abbr: "SEC '24"
   year: 2024
-  selected: true
   links:
     Full paper: "https://www.usenix.org/conference/usenixsecurity24/presentation/cho-kyuwon"
     Slides: "/assets/pdf/RustSan_SEC24_Slides.pdf"
@@ -88,7 +84,6 @@
   venue: "ACM SIGSAC Conference on Computer and Communications Security (CCS)"
   abbr: "CCS '23"
   year: 2023
-  selected: true
   award: "Distinguished Paper Award"
   links:
     Full paper: "https://dl.acm.org/doi/10.1145/3576915.3623079"

@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 
 profile:
@@ -12,7 +12,7 @@ profile:
     <p>Suwon, South Korea</p>
     <p>kyuwoncho18@gmail.com</p>
 
-selected_papers: true # includes a list of papers marked as "selected={true}"
+publications: true # includes the full publication list from _data/papers.yml
 social: true # includes social icons at the bottom of the page
 
 announcements:
@@ -40,5 +40,5 @@ My research interests include, but are not limited to:
 - Compilers for security
 - Systems security (kernel, hypervisor)
 
-More detailed information is available on the [CV](/cv/) page and my
+More detailed information is available in my [CV](/assets/pdf/cv.pdf) and my
 [Google Scholar](https://scholar.google.com/citations?user=AjgaSMoAAAAJ) profile.
