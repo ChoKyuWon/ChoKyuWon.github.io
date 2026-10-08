@@ -42,7 +42,7 @@
   abbr: "ESORICS'26"
   year: 2026
   links:
-    Full paper: "/assets/prepub/empac.pdf"
+    Full paper: "https://link.springer.com/chapter/10.1007/978-3-032-38692-2_26"
   abstract: >-
     The Pointer Authentication (PA) extension introduced in ARMv8.3-A has significantly raised the bar
     for exploiting memory errors with hardware-accelerated pointer integrity. Unfortunately, its adaptation
